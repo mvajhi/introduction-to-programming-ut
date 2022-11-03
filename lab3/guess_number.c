@@ -36,7 +36,7 @@ int main(void)
 		}
 		else
 		{
-			printf("\e[2;32mthat right!!!\e[0m\n");
+			printf("\e[1;32mthat's right!!!\e[0m\n");
 			return 0;
 		}
 	}
