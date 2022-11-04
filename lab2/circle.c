@@ -1,14 +1,13 @@
 #include <stdio.h>
 #define PI 3.1416
 
-
 int main(void)
 {
 
 	double r = 0, area = 0;
 
 	printf("enter radius: ");
-	scanf ("%lf", &r);
+	scanf("%lf", &r);
 
 	area = r * r * PI;
 

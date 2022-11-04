@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-
-
 int main(void)
 {
 
@@ -9,11 +7,10 @@ int main(void)
 
 	do
 	{
-	printf("enter length: ");
-	scanf("%i", &length);
-	}
-	while (length % 2 != 1);
-	
+		printf("enter length: ");
+		scanf("%i", &length);
+	} while (length % 2 != 1);
+
 	for (int i = 1; i <= length; i += 2)
 	{
 		for (int j = 0; j < (length - i + 1) / 2; j++)
@@ -30,7 +27,6 @@ int main(void)
 		}
 		printf("\n");
 	}
-
 
 	return 0;
 }

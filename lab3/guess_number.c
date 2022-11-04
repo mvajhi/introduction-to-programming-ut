@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define True 1
 #define False 0
@@ -13,24 +13,23 @@ int main(void)
 
 	int random_number = rand() % 100;
 
-
-	while(True)
+	while (True)
 	{
 		int guess = 0;
 
 		printf("guess: ");
 		scanf("%i", &guess);
-		if(!is_buffer_free())
+		if (!is_buffer_free())
 		{
 			printf("error\n");
 			continue;
 		}
 
-		if(guess > random_number)
+		if (guess > random_number)
 		{
 			printf("smaller than your guess.\n");
 		}
-		else if(guess < random_number)
+		else if (guess < random_number)
 		{
 			printf("bigger than your guess.\n");
 		}
@@ -44,14 +43,14 @@ int main(void)
 	return 0;
 }
 
-
 /*check buffer is free and if not clear that*/
 int is_buffer_free(void)
 {
-    int c;
-    int is_free = True;
-    while ((c = getchar()) != '\n') {is_free = False;}
-    return is_free;
+	int c;
+	int is_free = True;
+	while ((c = getchar()) != '\n')
+	{
+		is_free = False;
+	}
+	return is_free;
 }
-
-

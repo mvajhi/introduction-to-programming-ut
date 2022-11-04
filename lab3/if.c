@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 int main(void)
 {
@@ -7,7 +7,7 @@ int main(void)
     printf("enter your number: ");
     scanf("%i", &input);
 
-    if(input == 5)
+    if (input == 5)
     {
         printf("your number is 5.\n");
     }

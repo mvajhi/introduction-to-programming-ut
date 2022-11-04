@@ -1,6 +1,4 @@
-#include<stdio.h>
-
-
+#include <stdio.h>
 
 int main(void)
 {
@@ -11,6 +9,5 @@ int main(void)
 
 	printf("ASCII code is %i.\n", a);
 
-	
 	return 0;
 }
