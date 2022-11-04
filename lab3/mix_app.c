@@ -19,7 +19,7 @@ int main(void)
         printf("\n1. multiplication\n2. triangle\n\n\n0. exit\n\nEnter: ");
         success_input = scanf("%i", &option);
 
-        if (!success_input && !is_buffer_free())
+        if (!is_buffer_free() && !success_input)
         {
             option = 3;
         }
