@@ -11,8 +11,7 @@ int main(void)
 	printf("enter your number: ");
 	success = scanf("%d", &input);
 	/* check input */
-	int buffer = False;
-	if (!success || (buffer = getchar()) != '\n')
+	if (!success || getchar() != '\n')
 	{
 		printf("Try again\n");
 		return 0;
