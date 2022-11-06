@@ -1,6 +1,7 @@
 #include<stdio.h>
 
-
+#define True 1
+#define False 0
 
 int main(void)
 {
@@ -14,16 +15,34 @@ int main(void)
 		printf("Try again\n");
 		return 0;
 	}
-
-	if ((input1 % 10) % (input2 % 10) == 0 || (input2 % 10) % (input1 % 10) == 0)
+	
+	int first_digit1 = input1 % 10;
+	int first_digit2 = input2 % 10;
+	
+	if (first_digit1 == 1 || first_digit2 == 1)
 	{
 		printf("false\n");
 		return 0;
 	}
-	else
+
+	int is_prime = True;
+
+	for (int i = 2; i < 10; i++)
+	{
+		if (first_digit1 % i == 0 && first_digit2 % i == 0)
+		{
+			is_prime = False;
+			break;
+		}
+	}
+
+	if (is_prime == True)
 	{
 		printf("true\n");
-		return 0;
+	}
+	else
+	{
+		printf("false\n");
 	}
 
 	return 0;
