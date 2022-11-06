@@ -19,7 +19,7 @@ int main(void)
 	int first_digit1 = input1 % 10;
 	int first_digit2 = input2 % 10;
 	
-	if (first_digit1 == 1 || first_digit2 == 1)
+	if (first_digit1 == 0 || first_digit2 == 0)
 	{
 		printf("false\n");
 		return 0;
