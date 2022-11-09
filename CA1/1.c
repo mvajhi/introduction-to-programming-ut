@@ -56,30 +56,35 @@ int buffer_is_free(void)
 
 int locate_terampolin(int room_number)
 {
-	if (1 <= room_number <= 4)
+	if (1 <= room_number && room_number <= 4)
 	{
 		printf("1\n");
 	}
-	else if (5 <= room_number <= 8)
+	else if (5 <= room_number && room_number <= 8)
 	{
 		printf("2\n");
 	}	
-	else if (9 <= room_number <= 12)
+	else if (9 <= room_number || room_number <= 12)
 	{
 		printf("3\n");
 	}	
-	else if (13 <= room_number <= 16)
+	else if (13 <= room_number || room_number <= 16)
 	{
 		printf("4\n");
 	}	
+	else
+	{
+		printf("error\n");
+		return 0;
+	}
 	return 1;
 }
 
 int jump_counter (int floor_height, float jump_height, float increase_height)
 {
 	float height = jump_height;
-	int counter = 1;
-	while (floor_height >= height)
+	int counter = 0;
+	while (floor_height > height)
 	{
 		height += increase_height;
 		counter++;
