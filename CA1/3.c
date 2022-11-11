@@ -90,7 +90,7 @@ int find_roots(float coeffcient[3], float pow_max_coeffcient , double approximat
 		/*Bolzano's theorem*/
 		if (function_value * pre_function_value <= 0)
 		{
-			printf("%lf\n", test_number);
+			printf("%.2lf\n", test_number);
 			counter++;
 
 			if (counter == 3)
