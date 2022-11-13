@@ -10,7 +10,7 @@ int main(void)
 	/*get coefficient (ax^2 + bx + c)*/
 	float user_input[3] = {0};
 	
-	scanf("a=%f, b=%f, c=%f", &user_input[0], &user_input[1], &user_input[2]);
+	scanf("a = %f , b = %f , c = %f", &user_input[0], &user_input[1], &user_input[2]);
 
 	root_finder(user_input[0], user_input[1], user_input[2]);
 
