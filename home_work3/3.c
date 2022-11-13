@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 #define NUM_WORKER 4
 #define CYCLE 48
@@ -12,7 +12,7 @@ int main(void)
 	/*skip complete cycle*/
 	hours %= CYCLE;
 	char worker[NUM_WORKER] = {'A', 'B', 'C', 'D'};
-	
+
 	for (int i = 0; i < NUM_WORKER; i++)
 	{
 		if ((i + 1) * 12 > hours)

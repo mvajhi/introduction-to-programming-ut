@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 #define YEAR 1300
 #define LENGHT_YEAR 365

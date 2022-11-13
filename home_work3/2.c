@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<math.h>
+#include <stdio.h>
+#include <math.h>
 
 #define True 1
 #define False 0
@@ -52,6 +52,6 @@ int reverse_number(int number)
 		reverse_num += number % 10;
 		number /= 10;
 	}
-	
+
 	return reverse_num;
 }
