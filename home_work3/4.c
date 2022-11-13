@@ -14,7 +14,7 @@ int main(void)
 		float sqrt_i = sqrt(i);
 		int is_prime = True;
 		
-		for (int j = 2; j < sqrt(i); j++)
+		for (int j = 2; j < sqrt_i; j++)
 		{
 			if (i % j == 0)
 			{
