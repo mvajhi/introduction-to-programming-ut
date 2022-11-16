@@ -11,7 +11,7 @@ int main(void)
 
 	scanf("%i", &input1);
 
-	if (0 >= input1 || 0 >= (input1 % 100) || 16 <= (input1 % 100) || 0 >= (input1 / 100))
+	if (0 >= input1 || 0 >= (input1 % 100) || 16 < (input1 % 100) || 0 >= (input1 / 100))
 	{
 		printf("\e[1;31minput wrong\nTry again\n");
 		return 0;
@@ -42,11 +42,11 @@ int main(void)
 	{
 		printf("2\n");
 	}
-	else if (9 <= room_number || room_number <= 12)
+	else if (9 <= room_number && room_number <= 12)
 	{
 		printf("3\n");
 	}
-	else if (13 <= room_number || room_number <= 16)
+	else if (13 <= room_number && room_number <= 16)
 	{
 		printf("4\n");
 	}
