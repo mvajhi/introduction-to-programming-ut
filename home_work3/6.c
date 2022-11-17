@@ -10,7 +10,7 @@
 
 #define DAY 1
 
-int main(void);
+int main2(void);
 
 int main(void)
 {
@@ -39,7 +39,7 @@ int main2(void)
 	else
 	{
 		buffer -= HALF_YEAR * LENGHT_MONTH1;
-		month = HALF_YEAR + buffer / LENGHT_MONTH2;
+		month += HALF_YEAR + buffer / LENGHT_MONTH2;
 		buffer %= LENGHT_MONTH2;
 	}
 
