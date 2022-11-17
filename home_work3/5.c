@@ -1,6 +1,14 @@
 #include <stdio.h>
 
+int main2(void);
+
 int main(void)
+{
+	main2();
+	return 0;
+}
+
+int main2(void)
 {
 	int input = 0;
 	scanf("%i", &input);
@@ -17,6 +25,5 @@ int main(void)
 	}
 
 	printf("%lli", number);
-
 	return 0;
 }

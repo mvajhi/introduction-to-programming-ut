@@ -6,8 +6,15 @@
 
 int is_reverse(int number1, int number2);
 int reverse_number(int number);
+int main2(void);
 
 int main(void)
+{
+	main2();
+	return 0;
+}
+
+int main2(void)
 {
 	/*get input*/
 	int input[2] = {0};

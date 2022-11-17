@@ -4,8 +4,15 @@
 #include <math.h>
 
 int root_finder(float a, float b, float c);
+int main2(void);
 
 int main(void)
+{
+	main2();
+	return 0;
+}
+
+int main2(void)
 {
 	/*get coefficient (ax^2 + bx + c)*/
 	float user_input[3] = {0};

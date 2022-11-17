@@ -4,7 +4,15 @@
 #define True 1
 #define False 0
 
+int main2(void);
+
 int main(void)
+{
+	main2();
+	return 0;
+}
+
+int main2(void)
 {
 	int input = 0;
 	scanf("%i", &input);

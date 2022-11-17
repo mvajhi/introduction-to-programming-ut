@@ -3,7 +3,15 @@
 #define NUM_WORKER 4
 #define CYCLE 48
 
+int main2(void);
+
 int main(void)
+{
+	main2();
+	return 0;
+}
+
+int main2(void)
 {
 	int hours = 0;
 
