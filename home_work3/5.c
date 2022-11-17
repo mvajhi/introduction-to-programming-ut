@@ -17,13 +17,26 @@ int main2(void)
 	long long int number_past2 = 1;
 	long long int number = 0;
 
-	for (int i = 3; i <= input; i++)
+	for (int i = 3; i < input; i++)
 	{
 		number = number_past1 + number_past2;
 		number_past2 = number_past1;
 		number_past1 = number;
 	}
 
-	printf("%lli", number);
+
+	if (input  == 1)
+	{
+		printf("0");
+	}
+	else if (input < 4)
+	{
+		printf("1");
+	}
+	else
+	{
+		printf("%lli", number);
+	}
+
 	return 0;
 }
