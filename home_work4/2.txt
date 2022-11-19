@@ -1,0 +1,20 @@
+Start
+Let buffer[10] and numbers[11] and n and number and swap
+Get n (under 11)
+For i from 0 to n - 1 (add 1 each repeat)
+    Get buffer[i]
+Get number
+For i from 0 to n - 1 (add 1 each repeat)
+    numbers[i] equal buffer[i]
+numbers[n] equal number
+
+For i from 0 to n - 1 (add 1 each repeat)
+    For j from 0 to n - c - 1 (add 1 each repeat)
+        If numbers[j] > numbers[j + 1]
+            swap = numbers[j]
+            numbers[j] = numbers[j + 1]
+            numbers[j + 1] = swap
+
+For i from 0 to n (add 1 each repeat)
+    Print numbers[i]
+End
