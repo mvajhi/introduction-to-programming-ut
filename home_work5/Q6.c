@@ -23,7 +23,7 @@ float calc_mean(float* data_array) {
 	{
 		sum += data_array[i];
 	}
-	return sum / ARRAY_LENGTH;
+	return (float)sum / ARRAY_LENGTH;
 
 }
 
@@ -35,7 +35,7 @@ float calc_standard_deviation(float* data_array) {
 	{
 		sum += pow(data_array[i] - mean, 2);
 	}
-	return sqrt(sum / ARRAY_LENGTH);
+	return (float)sqrt(sum / ARRAY_LENGTH);
 }
 
 float calc_cv(float* data_array) {
