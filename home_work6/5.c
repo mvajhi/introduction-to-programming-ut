@@ -11,8 +11,7 @@ typedef struct Student
 	char name[NAME_LEN];
 	int sid;
 	float gpa;
-}
-Student;
+} Student;
 
 void sorting(Student *unsorted, Student *sorted, int len);
 void print_name(Student *input, int len);
@@ -45,7 +44,7 @@ int main(void)
 			{
 				len *= 2;
 			}
-			input = (Student*) realloc(input, len * sizeof(Student));
+			input = (Student *)realloc(input, len * sizeof(Student));
 		}
 
 		strcpy(input[counter].name, name);
@@ -55,7 +54,7 @@ int main(void)
 		counter++;
 	}
 
-	Student *sorted = (Student*) malloc(len * sizeof(Student));
+	Student *sorted = (Student *)malloc(len * sizeof(Student));
 
 	sorting(input, sorted, len);
 
@@ -84,7 +83,6 @@ void sorting(Student *unsorted, Student *sorted, int len)
 		sorted[i] = tmp;
 	}
 }
-
 
 void print_name(Student *input, int len)
 {
