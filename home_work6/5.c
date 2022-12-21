@@ -14,8 +14,8 @@ typedef struct Student
 }
 Student;
 
-void sorting(Student *unsorted, Student *sorted);
-void print_name(Student *input);
+void sorting(Student *unsorted, Student *sorted, int len);
+void print_name(Student *input, int len);
 
 int main(void)
 {
@@ -41,52 +41,53 @@ int main(void)
 
 		if (counter == len || counter == 0)
 		{
-			input = (Student*) realloc(input, len);
-			len *= 2;
+			if (counter != 0)
+			{
+				len *= 2;
+			}
+			input = (Student*) realloc(input, len * sizeof(Student));
 		}
 
-		strcmp(input[counter].name, name);
+		strcpy(input[counter].name, name);
 		input[counter].sid = sid;
 		input[counter].gpa = gpa;
 
 		counter++;
 	}
 
-	Student *sorted = (Student*) malloc(sizeof(input));
+	Student *sorted = (Student*) malloc(len * sizeof(Student));
 
-	sorting(input, sorted);
+	sorting(input, sorted, len);
 
-	print_name(sorted);
+	print_name(sorted, len);
 
 	return 0;
 }
 
-void sorting(Student *unsorted, Student *sorted)
+void sorting(Student *unsorted, Student *sorted, int len)
 {
-	memcpy(sorted, unsorted, sizeof(unsorted));
-	int len = sizeof(unsorted) / sizeof(Student);
+	memcpy(sorted, unsorted, len * sizeof(Student));
 	for (int i = 0; i < len; i++)
 	{
-		Student highest_gpa_stu = sorted[i];
+		int highest_gpa_stu_num = i;
 		int j;
 		for (j = i; j < len; j++)
 		{
-			if (highest_gpa_stu.gpa < sorted[j].gpa)
+			if (sorted[highest_gpa_stu_num].gpa < sorted[j].gpa)
 			{
-				highest_gpa_stu = sorted[j];
+				highest_gpa_stu_num = j;
 			}
 		}
-		
-		sorted[j] = unsorted[i];
-		sorted[i] = highest_gpa_stu;
+
+		Student tmp = sorted[highest_gpa_stu_num];
+		sorted[highest_gpa_stu_num] = sorted[i];
+		sorted[i] = tmp;
 	}
 }
 
 
-void print_name(Student *input)
+void print_name(Student *input, int len)
 {
-	int len = sizeof(input) / sizeof(Student);
-
 	for (int i = 0; i < len; i++)
 	{
 		printf("%i. %s\n", i + 1, input[i].name);
