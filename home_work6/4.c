@@ -59,7 +59,7 @@ void print_distance(Node *head)
 int main(void)
 {
 	Point *arr[1000];
-	int len = 1;
+	int len = 0;
 	while (1)
 	{
 		int x, y;
@@ -74,7 +74,7 @@ int main(void)
 		new->x = x;
 		new->y = y;
 
-		arr[len - 1] = new;
+		arr[len] = new;
 
 		len++;
 	}
