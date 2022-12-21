@@ -19,9 +19,10 @@ void print_name(Student *input);
 
 int main(void)
 {
-	int increase_len = 0;
+	int first_len = 0;
 	int counter = 0;
-	scanf("%i", &increase_len);
+	scanf("%i", &first_len);
+	int len = first_len;
 
 	Student *input = NULL;
 
@@ -38,12 +39,11 @@ int main(void)
 			break;
 		}
 
-		if (counter % increase_len == 0)
+		if (counter == len || counter == 0)
 		{
-			int len = sizeof(input);
-			input = (Student*) realloc(input, len + increase_len * sizeof(Student));
+			input = (Student*) realloc(input, len);
+			len *= 2;
 		}
-			printf("%i\n", sizeof(input) / sizeof(Student));
 
 		strcmp(input[counter].name, name);
 		input[counter].sid = sid;
