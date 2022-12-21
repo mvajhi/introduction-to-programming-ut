@@ -60,6 +60,9 @@ int main(void)
 
 	print_name(sorted, len);
 
+	free(input);
+	free(sorted);
+
 	return 0;
 }
 
