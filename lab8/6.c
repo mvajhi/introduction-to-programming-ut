@@ -10,7 +10,7 @@ int main(void)
 		return -1;
 	}
 
-	int header[154];
+	unsigned char header[154];
 	unsigned char RGB[50][50][3];
 
 	fread(header, 154, 1, input);
