@@ -55,32 +55,3 @@ void print_distance(Node *head)
 		cur = cur->next;
 	}
 }
-
-int main(void)
-{
-	Point *arr[1000];
-	int len = 0;
-	while (1)
-	{
-		int x, y;
-		scanf("%i %i", &x, &y);
-		
-		if (x == 82)
-		{
-			break;
-		}
-
-		Point *new = (Point*) malloc(sizeof(Point));
-		new->x = x;
-		new->y = y;
-
-		arr[len] = new;
-
-		len++;
-	}
-
-	Node *head = convert(arr, len);
-	print_distance(head);
-
-	return 0;
-}
