@@ -33,13 +33,15 @@ Post;
 
 int first_word();
 int free_buffer(int mod);
-int singup(User *head, User *logged);
-int get_dynamic_string(char *output, int mod);
+int signup(User **head, User *logged);
+int get_dynamic_string(char **output, int mod);
+int search_name(User *head, User **target, char *name);
+int free_memory(User *user_head, Post *post_head);
 
 int main (void)
 {
 	User *user_head = NULL;
-	User *logded = NULL;
+	User *logged = NULL;
 	Post *post_head = NULL;
 
 	while (True)
@@ -51,7 +53,7 @@ int main (void)
 				free_buffer(1);
 				break;
 			case 1:
-				singup(user_head, logged);
+				signup(&user_head, logged);
 				break;
 			case 2:
 				printf("login\n");
@@ -76,6 +78,7 @@ int main (void)
 				break;
 			case 9:
 				printf("free memory\n");
+				free_memory(user_head, post_head);
 				printf("bye!!\n");
 				return 1;
 			case -1:
@@ -111,7 +114,7 @@ int first_word()
 	if (!strcmp(first_word, "time_line"))
 		return 0;
 
-	else if (!strcmp(first_word, "singup"))
+	else if (!strcmp(first_word, "signup"))
 		return_val = 1;
 
 	else if (!strcmp(first_word, "login"))
@@ -161,26 +164,26 @@ int free_buffer(int mod)
 	return flag;
 }
 
-int singup(User *head, User *logged)
+int signup(User **head, User *logged)
 {
 	if (logged != NULL)
 	{
 		printf("You are already logged in\nPlease logout and try again\n");
 		return -1;
 	}
-
+	
 	//get name and password and check that and buffer
 	char *name = NULL;
-	int flag = get_dynamic_string(name, 1)
+	int flag = get_dynamic_string(&name, 1);
 	if (flag != 1)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
 		free(name);
 		return -2;
 	}
-	
+
 	char *password = NULL;
-	flag = get_dynamic_string(password, 3);
+	flag = get_dynamic_string(&password, 3);
 	if (flag != 1)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
@@ -191,19 +194,19 @@ int singup(User *head, User *logged)
 	
 	//add to linke list and set data
 	User *last_user = NULL;
-	if (/*TODO*/search_name(head, last_user, name))
+	if (search_name(*head, &last_user, name))
 	{
 		printf("This name is already exist\nTry again with another name\n");
 		free(name);
 		free(password);
 		return -5;
 	}
-	
+
 	User *new_user = (User *) malloc(sizeof(User));
 	
 	if (new_user == NULL)
 	{
-		printf("Can't get memory for singup\nTry again\n");
+		printf("Can't get memory for signup\nTry again\n");
 		free(name);
 		free(password);
 		return -6;
@@ -215,8 +218,20 @@ int singup(User *head, User *logged)
 	new_user->password = password;
 	new_user->last_post_id = FIRST_POST_ID;
 	new_user->next = NULL;
-	last_user->next = new_user;
+	if (*head == NULL)
+	{
+		*head = new_user;
+		printf("hi\n");
+	}
+	else
+	{
+		last_user->next = new_user;
+	}
 	user_id++;
+
+	printf("\\\\\\\\\\\\\\\\\n");
+	printf("id: %i\nname: %s\npassword: %s\npost_id: %i\n", new_user->user_id, new_user->name, new_user->password, new_user->last_post_id);
+	printf("\\\\\\\\\\\\\\\\\n");
 	
 	return 1;
 }
@@ -229,20 +244,22 @@ int singup(User *head, User *logged)
 //return 1 if succseful in mod 1, 2 and mod 3 with clear buffer
 //return 0 if buffer is empty
 //return -1 if unsuccesful to get memory
-int get_dynamic_string(char *output, int mod)
+int get_dynamic_string(char **output, int mod)
 {
+	char *string = NULL;
 	char c = '\0';
 	int len = 0;
 	while (((c = getchar()) != ' ' || mod == 2) && (c != '\n' || mod == 1))
 	{
 		len++;
-		output = (char *) realloc(output, len * sizeof(char));
-		if (output == NULL)
+		string = (char *) realloc(string, len * sizeof(char));
+		if (string == NULL)
 		{
 			printf("Can't get memory for dynamic string\n");
+			free(string);
 			return -1;
 		}
-		output[len-1] = c;
+		string[len-1] = c;
 	}
 
 	if (len == 0)
@@ -252,8 +269,9 @@ int get_dynamic_string(char *output, int mod)
 	}
 
 	//add NULL
-	output = (char *) realloc(output, (len + 1) * sizeof(char));
-	output[len] = '\0';
+	string = (char *) realloc(string, (len + 1) * sizeof(char));
+	string[len] = '\0';
+	*output = string;
 
 	if (mod == 3 && c == ' ')
 	{
@@ -264,5 +282,50 @@ int get_dynamic_string(char *output, int mod)
 		}
 	}
 
+	return 1;
+}
+
+//return 1 if find and else return 0
+//save user addres or last user in cur
+int search_name(User *head, User **target, char *name)
+{
+	User *cur = head;
+	User *pre = head;
+
+	while (cur != NULL)
+	{
+		if (!strcmp(cur->name, name))
+		{
+			*target = cur;
+			return 1;
+		}
+		
+		pre = cur;
+		cur = cur->next;
+	}
+
+	*target = pre;
+	return 0;
+}
+
+//free memory
+int free_memory(User *user_head, Post *post_head)
+{
+	User *u_cur = user_head;
+	User *u_pre = user_head;
+
+	while (u_cur != NULL)
+	{
+		free(u_cur->name);
+		free(u_cur->password);
+		
+		u_pre = u_cur;
+		u_cur = u_cur->next;
+
+		free(u_pre);
+	}
+
+	//TODO post free
+	
 	return 1;
 }
