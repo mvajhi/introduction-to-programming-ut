@@ -8,6 +8,27 @@
 
 #define FIRST_WORD_LENGHT 10
 
+typedef struct User
+{
+	int user_id;
+	char *name;
+	char *password;
+	int last_post_id;
+	struct User *next;
+}
+User;
+
+typedef struct Post
+{
+	int user_id;
+	char *user_name;
+	int post_id;
+	int like;
+	char *txt;
+	struct Post *next;
+}
+Post;
+
 int first_word();
 int free_buffer();
 
