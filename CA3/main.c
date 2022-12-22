@@ -221,7 +221,6 @@ int signup(User **head, User *logged)
 	if (*head == NULL)
 	{
 		*head = new_user;
-		printf("hi\n");
 	}
 	else
 	{
