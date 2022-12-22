@@ -7,6 +7,8 @@
 #define False 0
 
 #define FIRST_WORD_LENGHT 10
+#define FIRST_USER_ID 1
+#define FIRST_POST_ID 1
 
 typedef struct User
 {
@@ -32,7 +34,7 @@ Post;
 int first_word();
 int free_buffer(int mod);
 int singup(User *head, User *logged);
-char *get_dynamic_string(int mod);
+int get_dynamic_string(char *output, int mod);
 
 int main (void)
 {
@@ -167,24 +169,34 @@ int singup(User *head, User *logged)
 		return -1;
 	}
 
-	char *name = /*TODO*/get_dynamic_string(1);
-	char *password = get_dynamic_string(3);
-	//TODO if just input 2 arg
-	if (free_buffer(2))
+	//get name and password and check that and buffer
+	char *name = NULL;
+	int flag = get_dynamic_string(name, 1)
+	if (flag != 1)
 	{
-		printf("Get too meny argument\nTry again\n");
+		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
 		free(name);
-		free(password);
 		return -2;
 	}
 	
+	char *password = NULL;
+	flag = get_dynamic_string(password, 3);
+	if (flag != 1)
+	{
+		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
+		free(name);
+		free(password);
+		return -3;
+	}
+	
+	//add to linke list and set data
 	User *last_user = NULL;
 	if (/*TODO*/search_name(head, last_user, name))
 	{
 		printf("This name is already exist\nTry again with another name\n");
 		free(name);
 		free(password);
-		return -3;
+		return -5;
 	}
 	
 	User *new_user = (User *) malloc(sizeof(User));
@@ -194,7 +206,7 @@ int singup(User *head, User *logged)
 		printf("Can't get memory for singup\nTry again\n");
 		free(name);
 		free(password);
-		return -4;
+		return -6;
 	}
 
 	static user_id = FIRST_USER_ID;
@@ -204,7 +216,53 @@ int singup(User *head, User *logged)
 	new_user->last_post_id = FIRST_POST_ID;
 	new_user->next = NULL;
 	last_user->next = new_user;
+	user_id++;
 	
 	return 1;
 }
 
+//mod 1 : end when receive (space)
+//mod 2 : end when receive (\n)
+//mod 3 : end when receive (space) or (\n) and clear buffer
+//
+//return 2 if succesful in mod 3 with no clear buffer
+//return 1 if succseful in mod 1, 2 and mod 3 with clear buffer
+//return 0 if buffer is empty
+//return -1 if unsuccesful to get memory
+int get_dynamic_string(char *output, int mod)
+{
+	char c = '\0';
+	int len = 0;
+	while (((c = getchar()) != ' ' || mod == 2) && (c != '\n' || mod == 1))
+	{
+		len++;
+		output = (char *) realloc(output, len * sizeof(char));
+		if (output == NULL)
+		{
+			printf("Can't get memory for dynamic string\n");
+			return -1;
+		}
+		output[len-1] = c;
+	}
+
+	if (len == 0)
+	{
+		printf("buffer is empty\n");
+		return 0;
+	}
+
+	//add NULL
+	output = (char *) realloc(output, (len + 1) * sizeof(char));
+	output[len] = '\0';
+
+	if (mod == 3 && c == ' ')
+	{
+		if (!free_buffer(2))
+		{
+			printf("dynamic allocat succes but buffer have more string\n");
+			return 2;
+		}
+	}
+
+	return 1;
+}
