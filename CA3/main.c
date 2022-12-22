@@ -30,20 +30,26 @@ typedef struct Post
 Post;
 
 int first_word();
-int free_buffer();
+int free_buffer(int mod);
+int singup(User *head, User *logged);
+char *get_dynamic_string(int mod);
 
 int main (void)
 {
+	User *user_head = NULL;
+	User *logded = NULL;
+	Post *post_head = NULL;
+
 	while (True)
 	{
 		switch (first_word())
 		{
 			case 0:
 				printf("time line\n");
-				free_buffer();
+				free_buffer(1);
 				break;
 			case 1:
-				printf("singup\n");
+				singup(user_head, logged);
 				break;
 			case 2:
 				printf("login\n");
@@ -73,12 +79,12 @@ int main (void)
 			case -1:
 				printf("Invalid selection\n");
 				printf("free buffer\n");
-				free_buffer();
+				free_buffer(1);
 				break;
 			default:
 				printf("error\n");
 				printf("free buffer\n");
-				free_buffer();
+				free_buffer(1);
 				break;
 		}
 	}
@@ -140,12 +146,65 @@ int first_word()
 	return return_val;
 }
 
-//return True if free and False or not
-int free_buffer()
+//return True if free and False if not
+//mod 1: flag False when get every char
+//mod 2: flag False when get char expect (space)
+int free_buffer(int mod)
 {
 	char c;
 	int flag = True;
 	while ((c = getchar()) != '\n')
-		flag = False;
+		if (mod == 1 || c != ' ')
+			flag = False;
 	return flag;
 }
+
+int singup(User *head, User *logged)
+{
+	if (logged != NULL)
+	{
+		printf("You are already logged in\nPlease logout and try again\n");
+		return -1;
+	}
+
+	char *name = /*TODO*/get_dynamic_string(1);
+	char *password = get_dynamic_string(3);
+	//TODO if just input 2 arg
+	if (free_buffer(2))
+	{
+		printf("Get too meny argument\nTry again\n");
+		free(name);
+		free(password);
+		return -2;
+	}
+	
+	User *last_user = NULL;
+	if (/*TODO*/search_name(head, last_user, name))
+	{
+		printf("This name is already exist\nTry again with another name\n");
+		free(name);
+		free(password);
+		return -3;
+	}
+	
+	User *new_user = (User *) malloc(sizeof(User));
+	
+	if (new_user == NULL)
+	{
+		printf("Can't get memory for singup\nTry again\n");
+		free(name);
+		free(password);
+		return -4;
+	}
+
+	static user_id = FIRST_USER_ID;
+	new_user->user_id = user_id;
+	new_user->name = name;
+	new_user->password = password;
+	new_user->last_post_id = FIRST_POST_ID;
+	new_user->next = NULL;
+	last_user->next = new_user;
+	
+	return 1;
+}
+
