@@ -9,6 +9,7 @@
 #define FIRST_WORD_LENGHT 10
 #define FIRST_USER_ID 1
 #define FIRST_POST_ID 1
+#define LOGIN_AFTER_SIGNIN True
 
 typedef struct User
 {
@@ -33,10 +34,14 @@ Post;
 
 int first_word();
 int free_buffer(int mod);
-int signup(User **head, User *logged);
+int signup(User **head, User **logged);
 int get_dynamic_string(char **output, int mod);
 int search_name(User *head, User **target, char *name);
 int free_memory(User *user_head, Post *post_head);
+void log_state(User *logged);
+int login(User *head, User **logged);
+int get_username_and_password(char **username, char **password);
+int logout(User **logged);
 
 int main (void)
 {
@@ -46,6 +51,8 @@ int main (void)
 
 	while (True)
 	{
+		//TODO print menu
+		log_state(logged);
 		switch (first_word())
 		{
 			case 0:
@@ -53,10 +60,10 @@ int main (void)
 				free_buffer(1);
 				break;
 			case 1:
-				signup(&user_head, logged);
+				signup(&user_head, &logged);
 				break;
 			case 2:
-				printf("login\n");
+				login(user_head, &logged);
 				break;
 			case 3:
 				printf("post\n");
@@ -65,7 +72,7 @@ int main (void)
 				printf("like\n");
 				break;
 			case 5:
-				printf("logout\n");
+				logout(&logged);
 				break;
 			case 6:
 				printf("delete\n");
@@ -164,33 +171,20 @@ int free_buffer(int mod)
 	return flag;
 }
 
-int signup(User **head, User *logged)
+int signup(User **head, User **logged)
 {
-	if (logged != NULL)
+	if (*logged != NULL)
 	{
 		printf("You are already logged in\nPlease logout and try again\n");
+		free_buffer(1);
 		return -1;
 	}
 	
-	//get name and password and check that and buffer
 	char *name = NULL;
-	int flag = get_dynamic_string(&name, 1);
-	if (flag != 1)
-	{
-		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
-		free(name);
-		return -2;
-	}
-
 	char *password = NULL;
-	flag = get_dynamic_string(&password, 3);
+	int flag = get_username_and_password(&name, &password);
 	if (flag != 1)
-	{
-		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
-		free(name);
-		free(password);
-		return -3;
-	}
+		return -2;
 	
 	//add to linke list and set data
 	User *last_user = NULL;
@@ -199,7 +193,7 @@ int signup(User **head, User *logged)
 		printf("This name is already exist\nTry again with another name\n");
 		free(name);
 		free(password);
-		return -5;
+		return -3;
 	}
 
 	User *new_user = (User *) malloc(sizeof(User));
@@ -209,7 +203,7 @@ int signup(User **head, User *logged)
 		printf("Can't get memory for signup\nTry again\n");
 		free(name);
 		free(password);
-		return -6;
+		return -4;
 	}
 
 	static user_id = FIRST_USER_ID;
@@ -227,6 +221,9 @@ int signup(User **head, User *logged)
 		last_user->next = new_user;
 	}
 	user_id++;
+
+	if(LOGIN_AFTER_SIGNIN)
+		*logged = new_user;
 
 	printf("\\\\\\\\\\\\\\\\\n");
 	printf("id: %i\nname: %s\npassword: %s\npost_id: %i\n", new_user->user_id, new_user->name, new_user->password, new_user->last_post_id);
@@ -286,6 +283,7 @@ int get_dynamic_string(char **output, int mod)
 
 //return 1 if find and else return 0
 //save user addres or last user in cur
+//args: first pointer of user linked list - pointer to pointer for save user pointer - name of user
 int search_name(User *head, User **target, char *name)
 {
 	User *cur = head;
@@ -328,3 +326,89 @@ int free_memory(User *user_head, Post *post_head)
 	
 	return 1;
 }
+
+//print loggin state
+void log_state(User *logged)
+{
+	if(logged == NULL)
+	{
+		printf("\nYou aren't logged in. Log in for more features!\n");
+	}
+	else
+	{
+		printf("\nYou are logged in with %s\n", logged->name);
+	}
+}
+
+int login(User *head, User **logged)
+{
+	User *profile = NULL;
+	char *name = NULL;
+	char *password = NULL;
+	int flag = get_username_and_password(&name, &password);
+	if (flag != 1)
+		return -1;
+	
+	if (*logged != NULL)
+	{
+		printf("You are in an account.\nPlease logout and try again\n");
+		return -2;
+	}
+
+	if (!search_name(head, &profile, name))
+	{
+		printf("User not found\nTry again\n");
+		return -3;
+	}
+
+	if(strcmp(profile->password, password))
+	{
+		printf("Password incorrect\nTry again\n");
+		return -4;
+	}
+
+	*logged = profile;
+
+	return 1;
+}
+
+//get name and password and check that and buffer
+int get_username_and_password(char **username, char **password)
+{
+	char *name = NULL;
+	int flag = get_dynamic_string(&name, 1);
+	if (flag != 1)
+	{
+		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
+		free(name);
+		return -1;
+	}
+
+	char *pass = NULL;
+	flag = get_dynamic_string(&pass, 3);
+	if (flag != 1)
+	{
+		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
+		free(name);
+		free(pass);
+		return -2;
+	}
+
+	*username = name;
+	*password = pass;
+	return 1;
+}
+
+int logout(User **logged)
+{
+	if (*logged == NULL)
+	{
+		printf("You are already logout.\n");
+		return 0;
+	}
+	
+	*logged = NULL;
+	printf("You have successfully logged out\nSee you later!!\n");
+	return 1;
+}
+
