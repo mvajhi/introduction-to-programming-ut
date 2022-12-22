@@ -17,6 +17,10 @@ int main (void)
 	{
 		switch (first_word())
 		{
+			case 0:
+				printf("time line\n");
+				free_buffer();
+				break;
 			case 1:
 				printf("singup\n");
 				break;
@@ -75,7 +79,10 @@ int first_word()
 
 	//find switch
 	int return_val = -2;
-	if (!strcmp(first_word, "singup"))
+	if (!strcmp(first_word, "time_line"))
+		return 0;
+
+	else if (!strcmp(first_word, "singup"))
 		return_val = 1;
 
 	else if (!strcmp(first_word, "login"))
@@ -105,7 +112,7 @@ int first_word()
 	else
 		return -1;
 
-	//apart from exit, the others get more than argument
+	//apart from exit and time line, the others get more than argument
 	//remove space
 	char c = getchar();
 
