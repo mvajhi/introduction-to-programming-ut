@@ -42,7 +42,7 @@ int search_name(User *head, User **target, char *name);
 int free_memory(User *user_head, Post *post_head);
 void log_state(User *logged);
 int login(User *head, User **logged);
-int get_username_and_password(char **username, char **password);
+int get_two_arg(char **arg1, char **arg2);
 int logout(User **logged);
 void print_menu(User *logged);
 int posting(User *logged, Post **head);
@@ -187,7 +187,7 @@ int signup(User **head, User **logged)
 	
 	char *name = NULL;
 	char *password = NULL;
-	int flag = get_username_and_password(&name, &password);
+	int flag = get_two_arg(&name, &password);
 	if (flag != 1)
 		return -2;
 	
@@ -361,7 +361,7 @@ int login(User *head, User **logged)
 	User *profile = NULL;
 	char *name = NULL;
 	char *password = NULL;
-	int flag = get_username_and_password(&name, &password);
+	int flag = get_two_arg(&name, &password);
 	if (flag != 1)
 		return -1;
 	
@@ -388,30 +388,27 @@ int login(User *head, User **logged)
 	return 1;
 }
 
-//get name and password and check that and buffer
-int get_username_and_password(char **username, char **password)
+//get two argument (example: name and password) and check that and buffer
+//return 1 if successful if can't get arg 1 return -1 and can't get arg 2 return -2
+int get_two_arg(char **arg1, char **arg2)
 {
-	char *name = NULL;
-	int flag = get_dynamic_string(&name, 1);
+	int flag = get_dynamic_string(arg1, 1);
 	if (flag != 1)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
-		free(name);
+		free(*arg1);
 		return -1;
 	}
 
-	char *pass = NULL;
-	flag = get_dynamic_string(&pass, 3);
+	flag = get_dynamic_string(arg2, 3);
 	if (flag != 1)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
-		free(name);
-		free(pass);
+		free(*arg1);
+		free(*arg2);
 		return -2;
 	}
 
-	*username = name;
-	*password = pass;
 	return 1;
 }
 
@@ -488,7 +485,7 @@ int posting(User *logged, Post **head)
 	else
 	{
 		Post *cur = NULL;
-		flag = search_post(*head, &cur, new_post->name, new_post->post_id);
+		flag = search_post(*head, &cur, new_post->user_name, new_post->post_id);
 		if (flag != 0)
 		{
 			printf("Somting wrong.\nTry again.\n");
@@ -524,7 +521,7 @@ int search_post(Post *head, Post **target, char *username, int post_id)
 
 	while (cur != NULL)
 	{
-		if (!(strcmp(cur->name == username)) && cur->post_id == post_id)
+		if (!(strcmp(cur->user_name, username)) && cur->post_id == post_id)
 		{
 			*target = cur;
 			return 1;
@@ -536,3 +533,5 @@ int search_post(Post *head, Post **target, char *username, int post_id)
 	*target = pre;
 	return 0;
 }
+
+int like()
