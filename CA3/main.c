@@ -46,7 +46,7 @@ int get_username_and_password(char **username, char **password);
 int logout(User **logged);
 void print_menu(User *logged);
 int posting(User *logged, Post **head);
-int search_post(Post *head, Post **target, int user_id, int post_id);
+int search_post(Post *head, Post **target, char *username, int post_id);
 
 int main (void)
 {
@@ -488,7 +488,7 @@ int posting(User *logged, Post **head)
 	else
 	{
 		Post *cur = NULL;
-		flag = search_post(*head, &cur, new_post->user_id, new_post->post_id);
+		flag = search_post(*head, &cur, new_post->name, new_post->post_id);
 		if (flag != 0)
 		{
 			printf("Somting wrong.\nTry again.\n");
@@ -511,7 +511,7 @@ int posting(User *logged, Post **head)
 
 //if find return 1 and else 0 and -1 if head NULL
 //save location in target if not find save last
-int search_post(Post *head, Post **target, int user_id, int post_id)
+int search_post(Post *head, Post **target, char *username, int post_id)
 {
 	if (head == NULL)
 	{
@@ -524,7 +524,7 @@ int search_post(Post *head, Post **target, int user_id, int post_id)
 
 	while (cur != NULL)
 	{
-		if (cur->user_id == user_id && cur->post_id == post_id)
+		if (!(strcmp(cur->name == username)) && cur->post_id == post_id)
 		{
 			*target = cur;
 			return 1;
