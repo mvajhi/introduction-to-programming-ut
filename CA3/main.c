@@ -327,8 +327,19 @@ int free_memory(User *user_head, Post *post_head)
 		free(u_pre);
 	}
 
-	//TODO post free
-	
+	Post *p_cur = post_head;
+	Post *p_pre = post_head;
+
+	while (p_cur != NULL)
+	{
+		free(p_cur->txt);
+		
+		u_pre = u_cur;
+		u_cur = u_cur->next;
+
+		free(u_pre);
+	}
+
 	return 1;
 }
 
