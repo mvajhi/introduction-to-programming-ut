@@ -495,4 +495,34 @@ int posting(User *logged, Post **head)
 	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
 		
 	}
+	
+	return 1;
+}
 
+//if find return 1 and else 0 and -1 if head NULL
+//save location in target if not find save last
+int search_post(Post *head, Post **target, int user_id, int post_id)
+{
+	if (*head == NULL)
+	{
+		*target = NULL;
+		return -1;
+	}
+
+	Post *cur = head;
+	Post *pre = head;
+
+	while (cur != NULL)
+	{
+		if (cur->user_id == user_id && cur->post_id == post_id)
+		{
+			*target = cur;
+			return 1;
+		}
+		pre = cur;
+		cur = cur->next;
+	}
+
+	*target = pre;
+	return 0;
+}
