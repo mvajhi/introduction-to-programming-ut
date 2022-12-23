@@ -10,6 +10,8 @@
 #define FIRST_USER_ID 1
 #define FIRST_POST_ID 1
 #define LOGIN_AFTER_SIGNIN True
+#define INFO_SHOW_PASS True
+#define INFO_SHOW_OTHER_USER_PASS False
 
 typedef struct User
 {
@@ -42,6 +44,7 @@ void log_state(User *logged);
 int login(User *head, User **logged);
 int get_username_and_password(char **username, char **password);
 int logout(User **logged);
+void print_menu(User *logged);
 
 int main (void)
 {
@@ -51,7 +54,7 @@ int main (void)
 
 	while (True)
 	{
-		//TODO print menu
+		print_menu(logged);
 		log_state(logged);
 		switch (first_word())
 		{
@@ -412,3 +415,22 @@ int logout(User **logged)
 	return 1;
 }
 
+void print_menu(User *logged)
+{
+	printf("Command you can use:\n");
+	if (logged == NULL)
+	{
+		printf("\tlogin <username> <password>\n");
+		printf("\tsignup <username> <password>\n");
+	}
+	else
+	{
+		printf("\ttime_line\n");
+		printf("\tpost <text>\t");
+		printf("\tlike <username> <post id>\n");
+		printf("\tdelete <post id>\n");
+		printf("\tinfo\n");
+		printf("\tfind_user <username>\n");
+		printf("\tlogout\n");
+	}
+}
