@@ -45,6 +45,7 @@ int login(User *head, User **logged);
 int get_username_and_password(char **username, char **password);
 int logout(User **logged);
 void print_menu(User *logged);
+int posting(User *logged, Post **head);
 
 int main (void)
 {
@@ -69,7 +70,7 @@ int main (void)
 				login(user_head, &logged);
 				break;
 			case 3:
-				printf("post\n");
+				posting(logged, &post_head)
 				break;
 			case 4:
 				printf("like\n");
@@ -434,3 +435,64 @@ void print_menu(User *logged)
 		printf("\tlogout\n");
 	}
 }
+
+int posting(User *logged, Post **head)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		free_buffer(1);
+		return -1;
+	}
+
+	char *txt = NULL;
+	int flag = get_dynamic_string(&txt, 2);
+	if (flag != 1)
+	{
+		printf("error %i\nSomthing wrong in dynamic allocat text.\nTry again\n", flag);
+		free(txt);
+		return -2;
+	}
+
+	Post *new_post = (Post *) malloc(sizeof(Post));
+	if (new_post == NULL)
+	{
+		printf("Can't allocat memory for post.\nTry again.\n");
+		free(txt);
+		return -3;
+	}
+
+	new_post->post_id = ++logged->last_post_id;
+	new_post->user_id = logged->user_id;
+	new_post->user_name = logged->name;
+	new_post->like = 0;
+	new_post->txt = txt;
+	new_post->next = NULL;
+
+	if (*head == NULL)
+	{
+		*head = new_post;
+	}
+	else
+	{
+		int cur = NULL;
+		flag = search_post(head, &cur, new_post->user_id, new_post->post_id);
+		if (flag != 0)
+		{
+			printf("Somting wrong.\nTry again.\n");
+			free(txt);
+			free(new_post);
+			return -4;
+		}
+		cur->next = new_post;
+	}
+
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	printf("user: %s\n", new_post->user_name);
+	printf("post_id: %i\n", new_post->post_id);
+	printf("like: %i\n", new_post->like);
+	printf("post: %s\n", new_post->txt);
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+		
+	}
+
