@@ -8,7 +8,7 @@
 
 #define FIRST_WORD_LENGHT 10
 #define FIRST_USER_ID 1
-#define FIRST_POST_ID 1
+#define FIRST_POST_ID 0
 #define LOGIN_AFTER_SIGNIN True
 #define INFO_SHOW_PASS True
 #define INFO_SHOW_OTHER_USER_PASS False
@@ -46,6 +46,7 @@ int get_username_and_password(char **username, char **password);
 int logout(User **logged);
 void print_menu(User *logged);
 int posting(User *logged, Post **head);
+int search_post(Post *head, Post **target, int user_id, int post_id);
 
 int main (void)
 {
@@ -70,7 +71,7 @@ int main (void)
 				login(user_head, &logged);
 				break;
 			case 3:
-				posting(logged, &post_head)
+				posting(logged, &post_head);
 				break;
 			case 4:
 				printf("like\n");
@@ -427,7 +428,7 @@ void print_menu(User *logged)
 	else
 	{
 		printf("\ttime_line\n");
-		printf("\tpost <text>\t");
+		printf("\tpost <text>\n");
 		printf("\tlike <username> <post id>\n");
 		printf("\tdelete <post id>\n");
 		printf("\tinfo\n");
@@ -475,8 +476,8 @@ int posting(User *logged, Post **head)
 	}
 	else
 	{
-		int cur = NULL;
-		flag = search_post(head, &cur, new_post->user_id, new_post->post_id);
+		Post *cur = NULL;
+		flag = search_post(*head, &cur, new_post->user_id, new_post->post_id);
 		if (flag != 0)
 		{
 			printf("Somting wrong.\nTry again.\n");
@@ -493,8 +494,6 @@ int posting(User *logged, Post **head)
 	printf("like: %i\n", new_post->like);
 	printf("post: %s\n", new_post->txt);
 	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-		
-	}
 	
 	return 1;
 }
@@ -503,7 +502,7 @@ int posting(User *logged, Post **head)
 //save location in target if not find save last
 int search_post(Post *head, Post **target, int user_id, int post_id)
 {
-	if (*head == NULL)
+	if (head == NULL)
 	{
 		*target = NULL;
 		return -1;
