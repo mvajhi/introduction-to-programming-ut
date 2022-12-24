@@ -49,7 +49,10 @@ void print_menu(User *logged);
 int posting(User *logged, Post **head);
 int search_post(Post *head, Post **target, char *username, int post_id);
 int like(Post *head, User *logged);
+int delete_post(Post *head, User *logged);
 int search_liked_user(int *head, int like, int id, int **cur);
+
+int is_number(char *number);
 
 int main (void)
 {
@@ -513,7 +516,7 @@ int posting(User *logged, Post **head)
 }
 
 //if find return 1 and else 0 and -1 if head NULL
-//save location in target if not find save last
+//save before location in target if not find save last
 int search_post(Post *head, Post **target, char *username, int post_id)
 {
 	if (head == NULL)
@@ -529,7 +532,7 @@ int search_post(Post *head, Post **target, char *username, int post_id)
 	{
 		if (!(strcmp(cur->user_name, username)) && cur->post_id == post_id)
 		{
-			*target = cur;
+			*target = pre;
 			return 1;
 		}
 		pre = cur;
@@ -545,6 +548,7 @@ int like(Post *head, User *logged)
 	if (logged == NULL)
 	{
 		printf("You aren't in your account.\nPlease login and try again.\n");
+		free_buffer(1);
 		return -1;
 	}
 	char *username = NULL;
@@ -555,6 +559,14 @@ int like(Post *head, User *logged)
 		return -2;
 	}
 
+	if (!is_number(char_post_id))
+	{
+		printf("Invalid post id.\nTry again.\n");
+		free(username);
+		free(char_post_id);
+		return -3;
+	}
+
 	Post *cur = NULL;
 	flag = search_post(head, &cur, username, atoi(char_post_id));
 	if (flag != 1)
@@ -562,8 +574,9 @@ int like(Post *head, User *logged)
 		printf("Post not found.\n");
 		free(username);
 		free(char_post_id);
-		return -3;
+		return -4;
 	}
+	cur = cur->next;
 
 	int *cur_to_like = NULL;
 	if (search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
@@ -571,7 +584,7 @@ int like(Post *head, User *logged)
 		printf ("You already liked this post.\n");
 		free(username);
 		free(char_post_id);
-		return -4;
+		return -5;
 	}
 	
 	cur->users_id_liked = (int *) realloc(cur->users_id_liked, (cur->like + 1) * sizeof(int));
@@ -580,7 +593,7 @@ int like(Post *head, User *logged)
 		printf("can't allocat memory for save your id in the post for like.\nTry again.\n");
 		free(username);
 		free(char_post_id);
-		return -5;
+		return -6;
 	}
 
 	cur->users_id_liked[cur->like] = logged->user_id;
@@ -610,4 +623,63 @@ int search_liked_user(int *head, int like, int id, int **cur)
 
 	*cur = head + like - 1;
 	return 0;
+}
+
+int delete_post(Post *head, User *logged)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		free_buffer(1);
+		return -1;
+	}
+
+	char *char_post_id = NULL;
+	int flag = get_dynamic_string(&char_post_id, 3);
+
+	if (flag != 1)
+	{
+		printf("error %i\ncan't get post id.\nTry again.\n", flag);
+		free(char_post_id);
+		return -2;
+	}
+	
+	if (!is_number(char_post_id))
+	{
+		printf("Invalid post id.\nTry again.\n");
+		free(char_post_id);
+		retunr -3;
+	}
+
+	Post *cur = NULL;
+	flag = search_post(head, &cur, logged->name, atoi(char_post_id));
+	if (flag != 1)
+	{
+		printf("Post not found.\n");
+		free(char_post_id);
+		return -4;
+	}
+
+	Post *pre = cur;
+	cur = cur->next;
+	Post *next = cur->next;
+
+	pre->next = next;
+	free(cur->txt);
+	free(cur->users_id_liked);
+	free(cur);
+
+	return 1;
+}
+
+//if input is number retrun True else False
+int is_number(char *number)
+{
+	for (int i = 0; i < strlen(number); i++)
+	{
+		if (!isdigit(number[i]))
+			return False;
+	}
+
+	return True;
 }
