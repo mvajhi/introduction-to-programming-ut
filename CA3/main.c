@@ -29,6 +29,7 @@ typedef struct Post
 	char *user_name;
 	int post_id;
 	int like;
+	int *users_id_liked;
 	char *txt;
 	struct Post *next;
 }
@@ -333,6 +334,7 @@ int free_memory(User *user_head, Post *post_head)
 	while (p_cur != NULL)
 	{
 		free(p_cur->txt);
+		free(p_cur->users_id_liked);
 		
 		u_pre = u_cur;
 		u_cur = u_cur->next;
@@ -534,4 +536,53 @@ int search_post(Post *head, Post **target, char *username, int post_id)
 	return 0;
 }
 
-int like()
+int like(Post *head, User *logged)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		return -1;
+	}
+	char *username = NULL;
+	char *char_post_id = NULL;
+	int flag = get_two_arg(&username, &char_post_id);
+	if (flag != 1)
+	{
+		return -2;
+	}
+
+	Post *cur = NULL;
+	flag = search_post(haed, &cur, username, atoi(char_post_id));
+	if (flag != 1)
+	{
+		printf("Post not found.\n");
+		free(username);
+		free(char_post_id);
+		return -3;
+	}
+
+	int *cur_to_like = NULL;
+	if (/*TODO*/search_liked_user(cur, logged->user_id, &cur_to_like))
+	{
+		printf ("You already liked this post.\n");
+		free(username);
+		free(char_post_id);
+		return -4;
+	}
+	
+	cur->users_id_liked = (int *) realloc(cur->users_id_liked, (cur->like + 1) * sizeof(int));
+	if (cur->users_id_liked == NULL)
+	{
+		printf("can't allocat memory for save your id in the post for like.\nTry again.\n");
+		free(username);
+		free(char_post_id);
+		return -5;
+	}
+
+	cur->users_id_liked[cur->like] = logged->user_id;
+	cur->like++;
+
+	free(username);
+	free(char_post_id);
+	return 1;
+}
