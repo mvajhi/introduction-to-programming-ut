@@ -48,6 +48,8 @@ int logout(User **logged);
 void print_menu(User *logged);
 int posting(User *logged, Post **head);
 int search_post(Post *head, Post **target, char *username, int post_id);
+int like(Post *head, User *logged);
+int search_liked_user(int *head, int like, int id, int **cur);
 
 int main (void)
 {
@@ -562,7 +564,7 @@ int like(Post *head, User *logged)
 	}
 
 	int *cur_to_like = NULL;
-	if (/*TODO*/search_liked_user(cur, logged->user_id, &cur_to_like))
+	if (search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
 	{
 		printf ("You already liked this post.\n");
 		free(username);
@@ -584,5 +586,26 @@ int like(Post *head, User *logged)
 
 	free(username);
 	free(char_post_id);
+
+	pritnf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	printf("like: %i", cur->like);
+	pritnf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
 	return 1;
+}
+
+//return 1 if find and else 0
+//cur linked to id if not save last
+int search_liked_user(int *head, int like, int id, int **cur)
+{
+	for (int i = 0; i < like; i++)
+	{
+		if (head[i] == id)
+		{
+			*cur = head + i;
+			return 1;
+		}
+	}
+
+	*cur = head[like - 1];
+	return 0;
 }
