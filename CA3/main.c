@@ -77,7 +77,7 @@ int main (void)
 				posting(logged, &post_head);
 				break;
 			case 4:
-				printf("like\n");
+				like(post_head, logged);
 				break;
 			case 5:
 				logout(&logged);
@@ -338,10 +338,10 @@ int free_memory(User *user_head, Post *post_head)
 		free(p_cur->txt);
 		free(p_cur->users_id_liked);
 		
-		u_pre = u_cur;
-		u_cur = u_cur->next;
+		p_pre = p_cur;
+		p_cur = p_cur->next;
 
-		free(u_pre);
+		free(p_pre);
 	}
 
 	return 1;
@@ -436,6 +436,7 @@ void print_menu(User *logged)
 	{
 		printf("\tlogin <username> <password>\n");
 		printf("\tsignup <username> <password>\n");
+		printf("\texit\n");
 	}
 	else
 	{
@@ -446,6 +447,7 @@ void print_menu(User *logged)
 		printf("\tinfo\n");
 		printf("\tfind_user <username>\n");
 		printf("\tlogout\n");
+		printf("\texit\n");
 	}
 }
 
@@ -554,7 +556,7 @@ int like(Post *head, User *logged)
 	}
 
 	Post *cur = NULL;
-	flag = search_post(haed, &cur, username, atoi(char_post_id));
+	flag = search_post(head, &cur, username, atoi(char_post_id));
 	if (flag != 1)
 	{
 		printf("Post not found.\n");
@@ -587,9 +589,9 @@ int like(Post *head, User *logged)
 	free(username);
 	free(char_post_id);
 
-	pritnf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-	printf("like: %i", cur->like);
-	pritnf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	printf("like: %i\n", cur->like);
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
 	return 1;
 }
 
@@ -606,6 +608,6 @@ int search_liked_user(int *head, int like, int id, int **cur)
 		}
 	}
 
-	*cur = head[like - 1];
+	*cur = head + like - 1;
 	return 0;
 }
