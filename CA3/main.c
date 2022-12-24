@@ -51,8 +51,9 @@ int search_post(Post *head, Post **target, char *username, int post_id);
 int like(Post *head, User *logged);
 int delete_post(Post *head, User *logged);
 int search_liked_user(int *head, int like, int id, int **cur);
-
 int is_number(char *number);
+int info(User *user, Post *head, int print_pass);
+int other_info(User *haed, Post *head, User *logged);
 
 int main (void)
 {
@@ -86,10 +87,10 @@ int main (void)
 				logout(&logged);
 				break;
 			case 6:
-				printf("delete\n");
+				delete_post(post_head, logged);
 				break;
 			case 7:
-				printf("info\n");
+				info(logged, post_head, INFO_SHOW_PASS);
 				break;
 			case 8:
 				printf("find user\n");
@@ -683,3 +684,55 @@ int is_number(char *number)
 
 	return True;
 }
+
+int info(User *user, Post *head, int print_pass)
+{
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	printf("\tid: %i\n", user->user_id);
+	printf("\tusername: %s\n", user->name);
+	if (print_pass)
+		printf("\tpassword: %s\n", user->password);
+	for (int i = 0; i < user->last_post_id; i++)
+	{
+		Post *cur = NULL;
+		int flag = search_post(head, &cur, user->name, i);
+	if (flag == 1)
+		{
+			printf("\t\t\\\\\\\\\\\\\\\\\\\n");
+			printf("\t\t\tpost id: %i\n", cur->post_id);
+			printf("\t\t\tlike: %i\n", cur->like);
+			printf("\t\t\tpost: %s\n", cur->txt);
+			printf("\t\\\\\\\\\\\\\\\\\\\n");
+		}
+	}
+	printf("\\\\\\\\\\\\\\\\\\\\\\\\\n");
+	return 1;
+}
+
+int other_info(User *head, Post *head, User *logged)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		free_buffer(1);
+		return -1;
+	}
+
+	char *username = NULL;
+	int flag = get_dynamic_string(&username, 3);
+
+	if (flag != 1)
+	{
+		printf("error %i\ncan't get username.\nTry again.\n", flag);
+		free(username);
+		return -2;
+	}
+
+	User *user = NULL;
+	flag = search_name(head, &user, username);
+	if (flag == 1)
+	{
+		printf("User not founc.\n");
+		free(username);
+		return -1;
+	}
