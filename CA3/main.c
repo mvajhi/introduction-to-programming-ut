@@ -783,3 +783,26 @@ int logged_info(User *logged,Post *post_head)
 
 	return 1;
 }
+
+int time_line(Post *head, User *logged)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		return -1;
+	}
+
+	Post *cur = head;
+
+	while (cur != NULL)
+	{
+		printf("\t\\\\\\\\\\\\\\\\\\\n");
+		printf("\t\tusername: %s\n", cur->user_name);
+		printf("\t\tpost id: %i\n", cur->post_id);
+		printf("\t\tlike: %i\n", cur->like);
+		printf("\t\tpost: %s\n", cur->txt);
+		printf("\t\\\\\\\\\\\\\\\\\\\n");
+
+		cur = cur->next;
+	}
+}
