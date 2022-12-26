@@ -1,0 +1,184 @@
+mahdi@mahdi-VirtualBox:~/Desktop/code/CA3$ valgrind -v --track-origins=yes ./main 
+==15898== Memcheck, a memory error detector
+==15898== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==15898== Using Valgrind-3.18.1-42b08ed5bd-20211015 and LibVEX; rerun with -h for copyright info
+==15898== Command: ./main
+==15898== 
+--15898-- Valgrind options:
+--15898--    -v
+--15898--    --track-origins=yes
+--15898-- Contents of /proc/version:
+--15898--   Linux version 5.15.0-56-generic (buildd@lcy02-amd64-004) (gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #62-Ubuntu SMP Tue Nov 22 19:54:14 UTC 2022
+--15898-- 
+--15898-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-rdrand-rdseed
+--15898-- Page sizes: currently 4096, max supported 4096
+--15898-- Valgrind library directory: /usr/libexec/valgrind
+--15898-- Reading syms from /home/mahdi/Desktop/code/CA3/main
+--15898-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--15898--   Considering /usr/lib/debug/.build-id/61/ef896a699bb1c2e4e231642b2e1688b2f1a61e.debug ..
+--15898--   .. build-id is valid
+--15898-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--15898--    object doesn't have a symbol table
+--15898--    object doesn't have a dynamic symbol table
+--15898-- Scheduler: using generic scheduler lock implementation.
+--15898-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==15898== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-15898-by-mahdi-on-???
+==15898== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-15898-by-mahdi-on-???
+==15898== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-15898-by-mahdi-on-???
+==15898== 
+==15898== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==15898== don't want to do, unless you know exactly what you're doing,
+==15898== or are doing some strange experiment):
+==15898==   /usr/bin/vgdb --pid=15898 ...command...
+==15898== 
+==15898== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==15898==   /path/to/gdb ./main
+==15898== and then give GDB the following command
+==15898==   target remote | /usr/bin/vgdb --pid=15898
+==15898== --pid is optional if only one valgrind process is running
+==15898== 
+--15898-- REDIR: 0x402aa60 (ld-linux-x86-64.so.2:strlen) redirected to 0x580bcec2 (???)
+--15898-- REDIR: 0x402a830 (ld-linux-x86-64.so.2:index) redirected to 0x580bcedc (???)
+--15898-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--15898--    object doesn't have a symbol table
+--15898-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+--15898--    object doesn't have a symbol table
+==15898== WARNING: new redirection conflicts with existing -- ignoring it
+--15898--     old: 0x0402aa60 (strlen              ) R-> (0000.0) 0x580bcec2 ???
+--15898--     new: 0x0402aa60 (strlen              ) R-> (2007.0) 0x0484ee30 strlen
+--15898-- REDIR: 0x4027240 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484fcd0 (strcmp)
+--15898-- REDIR: 0x402afc0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853840 (mempcpy)
+--15898-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--15898--   Considering /usr/lib/debug/.build-id/69/389d485a9793dbe873f0ea2c93e02efaa9aa3d.debug ..
+--15898--   .. build-id is valid
+==15898== WARNING: new redirection conflicts with existing -- ignoring it
+--15898--     old: 0x04911ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--15898--     new: 0x04911ce0 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==15898== WARNING: new redirection conflicts with existing -- ignoring it
+--15898--     old: 0x04911ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--15898--     new: 0x04911ce0 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+==15898== WARNING: new redirection conflicts with existing -- ignoring it
+--15898--     old: 0x04911ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--15898--     new: 0x04911ce0 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==15898== WARNING: new redirection conflicts with existing -- ignoring it
+--15898--     old: 0x04911ce0 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--15898--     new: 0x04911ce0 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+--15898-- REDIR: 0x49147a0 (libc.so.6:strnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914a60 (libc.so.6:strpbrk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914360 (libc.so.6:strcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4932d50 (libc.so.6:wcsnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915750 (libc.so.6:memset) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49315c0 (libc.so.6:wcslen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915c90 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49313f0 (libc.so.6:wcschr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49142e0 (libc.so.6:index) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49149e0 (libc.so.6:rindex) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915620 (libc.so.6:memmove) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+==15898== Preferring higher priority redirection:
+--15898--     old: 0x04a0c940 (__memcpy_avx_unalign) R-> (2018.0) 0x04850f90 __memcpy_avx_unaligned_erms
+--15898--     new: 0x04a0c940 (__memcpy_avx_unalign) R-> (2018.1) 0x04852880 memmove
+--15898-- REDIR: 0x4931470 (libc.so.6:wcscmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915a60 (libc.so.6:stpncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4931a30 (libc.so.6:wmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49148b0 (libc.so.6:strncmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915af0 (libc.so.6:strcasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49144a0 (libc.so.6:strcspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49314f0 (libc.so.6:wcscpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914250 (libc.so.6:strcat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915be0 (libc.so.6:strncasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915500 (libc.so.6:bcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x491d5f0 (libc.so.6:memrchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4917090 (libc.so.6:strchrnul) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914410 (libc.so.6:strcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915b90 (libc.so.6:strcasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914720 (libc.so.6:strlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914950 (libc.so.6:strncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x49159d0 (libc.so.6:stpcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915470 (libc.so.6:memchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4914b80 (libc.so.6:strspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915850 (libc.so.6:mempcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4915b40 (libc.so.6:strncasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4917000 (libc.so.6:rawmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--15898-- REDIR: 0x4a09790 (libc.so.6:__strrchr_avx2) redirected to 0x484e810 (rindex)
+--15898-- REDIR: 0x4a09960 (libc.so.6:__strlen_avx2) redirected to 0x484ed10 (strlen)
+--15898-- REDIR: 0x4911120 (libc.so.6:malloc) redirected to 0x4848820 (malloc)
+Command you can use:
+--15898-- REDIR: 0x4a0c900 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4853440 (mempcpy)
+	login <username> <password>
+	signup <username> <password>
+	exit
+
+You aren't logged in. Log in for more features!
+signup mahdi 1234
+--15898-- REDIR: 0x4a04ac0 (libc.so.6:__strcmp_avx2) redirected to 0x484fbd0 (strcmp)
+--15898-- REDIR: 0x49117c0 (libc.so.6:realloc) redirected to 0x484dc50 (realloc)
+\\\\\\\\
+--15898-- REDIR: 0x4a09580 (libc.so.6:__strchrnul_avx2) redirected to 0x4853330 (strchrnul)
+id: 1
+name: mahdi
+password: 1234
+post_id: 0
+\\\\\\\\
+Command you can use:
+	time_line
+	post <text>
+	like <username> <post id>
+	delete <post id>
+	info
+	find_user <username>
+	logout
+	exit
+
+You are logged in with mahdi
+post hi
+\\\\\\\\\\\\\\\\\
+user: mahdi
+post_id: 1
+like: 0
+post: hi
+\\\\\\\\\\\\\\\\\
+Command you can use:
+	time_line
+	post <text>
+	like <username> <post id>
+	delete <post id>
+	info
+	find_user <username>
+	logout
+	exit
+
+You are logged in with mahdi
+exit
+free memory
+--15898-- REDIR: 0x4911460 (libc.so.6:free) redirected to 0x484b210 (free)
+==15898== Conditional jump or move depends on uninitialised value(s)
+==15898==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15898==    by 0x109B80: free_memory (in /home/mahdi/Desktop/code/CA3/main)
+==15898==    by 0x109443: main (in /home/mahdi/Desktop/code/CA3/main)
+==15898==  Uninitialised value was created by a heap allocation
+==15898==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15898==    by 0x109F8A: posting (in /home/mahdi/Desktop/code/CA3/main)
+==15898==    by 0x1093A7: main (in /home/mahdi/Desktop/code/CA3/main)
+==15898== 
+bye!!
+==15898== 
+==15898== HEAP SUMMARY:
+==15898==     in use at exit: 0 bytes in 0 blocks
+==15898==   total heap usage: 18 allocs, 18 frees, 2,178 bytes allocated
+==15898== 
+==15898== All heap blocks were freed -- no leaks are possible
+==15898== 
+==15898== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==15898== 
+==15898== 1 errors in context 1 of 1:
+==15898== Conditional jump or move depends on uninitialised value(s)
+==15898==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15898==    by 0x109B80: free_memory (in /home/mahdi/Desktop/code/CA3/main)
+==15898==    by 0x109443: main (in /home/mahdi/Desktop/code/CA3/main)
+==15898==  Uninitialised value was created by a heap allocation
+==15898==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15898==    by 0x109F8A: posting (in /home/mahdi/Desktop/code/CA3/main)
+==15898==    by 0x1093A7: main (in /home/mahdi/Desktop/code/CA3/main)
+==15898== 
+==15898== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+
