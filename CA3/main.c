@@ -12,6 +12,8 @@
 #define LOGIN_AFTER_SIGNIN True
 #define INFO_SHOW_PASS True
 #define INFO_SHOW_OTHER_USER_PASS False
+#define RETURN_CUR 1
+#define RETURN_PRE 2
 
 typedef struct User
 {
@@ -47,13 +49,15 @@ int get_two_arg(char **arg1, char **arg2);
 int logout(User **logged);
 void print_menu(User *logged);
 int posting(User *logged, Post **head);
-int search_post(Post *head, Post **target, char *username, int post_id);
+int search_post(Post *head, Post **target, char *username, int post_id, int mod);
 int like(Post *head, User *logged);
-int delete_post(Post *head, User *logged);
+int delete_post(Post **head, User *logged);
 int search_liked_user(int *head, int like, int id, int **cur);
 int is_number(char *number);
 int info(User *user, Post *head, int print_pass);
-int other_info(User *haed, Post *head, User *logged);
+int other_info(User *u_head, Post *p_head, User *logged);
+int logged_info(User *logged,Post *post_head);
+int time_line(Post *head, User *logged);
 
 int main (void)
 {
@@ -68,8 +72,7 @@ int main (void)
 		switch (first_word())
 		{
 			case 0:
-				printf("time line\n");
-				free_buffer(1);
+				time_line(post_head, logged);
 				break;
 			case 1:
 				signup(&user_head, &logged);
@@ -87,13 +90,13 @@ int main (void)
 				logout(&logged);
 				break;
 			case 6:
-				delete_post(post_head, logged);
+				delete_post(&post_head, logged);
 				break;
 			case 7:
-				info(logged, post_head, INFO_SHOW_PASS);
+				logged_info(logged, post_head);
 				break;
 			case 8:
-				printf("find user\n");
+				other_info(user_head, post_head, logged);
 				break;
 			case 9:
 				printf("free memory\n");
@@ -218,7 +221,7 @@ int signup(User **head, User **logged)
 		return -4;
 	}
 
-	static user_id = FIRST_USER_ID;
+	static int user_id = FIRST_USER_ID;
 	new_user->user_id = user_id;
 	new_user->name = name;
 	new_user->password = password;
@@ -495,7 +498,7 @@ int posting(User *logged, Post **head)
 	else
 	{
 		Post *cur = NULL;
-		flag = search_post(*head, &cur, new_post->user_name, new_post->post_id);
+		flag = search_post(*head, &cur, new_post->user_name, new_post->post_id, RETURN_PRE);
 		if (flag != 0)
 		{
 			printf("Somting wrong.\nTry again.\n");
@@ -516,9 +519,11 @@ int posting(User *logged, Post **head)
 	return 1;
 }
 
-//if find return 1 and else 0 and -1 if head NULL
-//save before location in target if not find save last
-int search_post(Post *head, Post **target, char *username, int post_id)
+//if find return 1 and if that is head return 2 and else 0 and -1 if head NULL
+//return:
+//if mod RETURN_CUR:return that post
+//if mod RETURN_PRE:return before post
+int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 {
 	if (head == NULL)
 	{
@@ -533,14 +538,26 @@ int search_post(Post *head, Post **target, char *username, int post_id)
 	{
 		if (!(strcmp(cur->user_name, username)) && cur->post_id == post_id)
 		{
-			*target = pre;
+			if (mod == RETURN_PRE)
+				*target = pre;
+			else if (mod == RETURN_CUR)
+				*target = cur;
+			else
+				return -2;
+			if (cur == head)
+				return 2;
 			return 1;
 		}
 		pre = cur;
 		cur = cur->next;
 	}
 
-	*target = pre;
+	if (mod == RETURN_PRE)
+		*target = pre;
+	else if (mod == RETURN_CUR)
+		*target = cur;
+	else
+		return -2;
 	return 0;
 }
 
@@ -569,15 +586,14 @@ int like(Post *head, User *logged)
 	}
 
 	Post *cur = NULL;
-	flag = search_post(head, &cur, username, atoi(char_post_id));
-	if (flag != 1)
+	flag = search_post(head, &cur, username, atoi(char_post_id), RETURN_CUR);
+	if (flag < 1)
 	{
 		printf("Post not found.\n");
 		free(username);
 		free(char_post_id);
 		return -4;
 	}
-	cur = cur->next;
 
 	int *cur_to_like = NULL;
 	if (search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
@@ -626,7 +642,7 @@ int search_liked_user(int *head, int like, int id, int **cur)
 	return 0;
 }
 
-int delete_post(Post *head, User *logged)
+int delete_post(Post **head, User *logged)
 {
 	if (logged == NULL)
 	{
@@ -649,26 +665,38 @@ int delete_post(Post *head, User *logged)
 	{
 		printf("Invalid post id.\nTry again.\n");
 		free(char_post_id);
-		retunr -3;
+		return -3;
 	}
 
 	Post *cur = NULL;
-	flag = search_post(head, &cur, logged->name, atoi(char_post_id));
-	if (flag != 1)
+	flag = search_post(*head, &cur, logged->name, atoi(char_post_id), RETURN_PRE);
+	if (flag < 1)
 	{
 		printf("Post not found.\n");
 		free(char_post_id);
 		return -4;
 	}
 
-	Post *pre = cur;
-	cur = cur->next;
-	Post *next = cur->next;
+	Post *pre;
+	Post *next;
 
-	pre->next = next;
-	free(cur->txt);
-	free(cur->users_id_liked);
-	free(cur);
+	if (flag == 2)
+	{
+		next = cur->next;
+		*head = next;
+	}
+	else
+	{
+		pre = cur;
+        cur = cur->next;
+        next = cur->next;
+
+        pre->next = next;
+	}
+
+        free(cur->txt);
+        free(cur->users_id_liked);
+        free(cur);
 
 	return 1;
 }
@@ -692,24 +720,24 @@ int info(User *user, Post *head, int print_pass)
 	printf("\tusername: %s\n", user->name);
 	if (print_pass)
 		printf("\tpassword: %s\n", user->password);
-	for (int i = 0; i < user->last_post_id; i++)
+	for (int i = 1; i <= user->last_post_id; i++)
 	{
 		Post *cur = NULL;
-		int flag = search_post(head, &cur, user->name, i);
-	if (flag == 1)
+		int flag = search_post(head, &cur, user->name, i, RETURN_CUR);
+		if (flag >= 1)
 		{
 			printf("\t\t\\\\\\\\\\\\\\\\\\\n");
 			printf("\t\t\tpost id: %i\n", cur->post_id);
 			printf("\t\t\tlike: %i\n", cur->like);
 			printf("\t\t\tpost: %s\n", cur->txt);
-			printf("\t\\\\\\\\\\\\\\\\\\\n");
+			printf("\t\t\\\\\\\\\\\\\\\\\\\n");
 		}
 	}
 	printf("\\\\\\\\\\\\\\\\\\\\\\\\\n");
 	return 1;
 }
 
-int other_info(User *head, Post *head, User *logged)
+int other_info(User *u_head, Post *p_head, User *logged)
 {
 	if (logged == NULL)
 	{
@@ -729,10 +757,29 @@ int other_info(User *head, Post *head, User *logged)
 	}
 
 	User *user = NULL;
-	flag = search_name(head, &user, username);
-	if (flag == 1)
+	flag = search_name(u_head, &user, username);
+	if (flag == 0)
 	{
-		printf("User not founc.\n");
+		printf("User not found.\n");
 		free(username);
 		return -1;
 	}
+
+	info(user, p_head,INFO_SHOW_OTHER_USER_PASS);
+
+	free(username);
+	return 1;
+}
+
+int logged_info(User *logged,Post *post_head)
+{
+	if (logged == NULL)
+	{
+		printf("You aren't in your account.\nPlease login and try again.\n");
+		return -1;
+	}
+
+	info(logged, post_head, INFO_SHOW_PASS);
+
+	return 1;
+}
