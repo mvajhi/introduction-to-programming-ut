@@ -12,8 +12,6 @@
 #define LOGIN_AFTER_SIGNIN True
 #define INFO_SHOW_PASS True
 #define INFO_SHOW_OTHER_USER_PASS False
-#define RETURN_CUR 1
-#define RETURN_PRE 2
 #define SIZE_OF_NULL 1
 
 //define switch return
@@ -40,6 +38,16 @@
 #define SUCCESSFUL_GET_ARG 1
 #define FAILED_ARG_ONE -1
 #define FAILED_ARG_TWO -2
+
+//define search_post return
+#define FIND 1
+#define FIND_BUT_HEAD 2
+#define NOT_FIND 0
+#define NULL_HEAD -1
+
+//define search_post arg
+#define RETURN_CUR 1
+#define RETURN_PRE 2
 
 typedef struct User
 {
@@ -548,7 +556,7 @@ int posting(User *logged, Post **head)
 	{
 		Post *cur = NULL;
 		flag = search_post(*head, &cur, new_post->user_name, new_post->post_id, RETURN_PRE);
-		if (flag != 0)
+		if (flag != NOT_FIND)
 		{
 			printf("Somting wrong.\nTry again.\n");
 			free(txt);
@@ -568,7 +576,7 @@ int posting(User *logged, Post **head)
 	return 1;
 }
 
-//if find return 1 and if that is head return 2 and else 0 and -1 if head NULL
+//if find return FIND and if that is head return FIND_BUT_HEAD and else NOT_FIND and NULL_HEAD if head NULL
 //return:
 //if mod RETURN_CUR:return that post
 //if mod RETURN_PRE:return before post
@@ -577,7 +585,7 @@ int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 	if (head == NULL)
 	{
 		*target = NULL;
-		return -1;
+		return NULL_HEAD;
 	}
 
 	Post *cur = head;
@@ -591,11 +599,11 @@ int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 				*target = pre;
 			else if (mod == RETURN_CUR)
 				*target = cur;
-			else
-				return -2;
+
 			if (cur == head)
-				return 2;
-			return 1;
+				return FIND_BUT_HEAD;
+
+			return FIND;
 		}
 		pre = cur;
 		cur = cur->next;
@@ -605,9 +613,8 @@ int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 		*target = pre;
 	else if (mod == RETURN_CUR)
 		*target = cur;
-	else
-		return -2;
-	return 0;
+
+	return NOT_FIND;
 }
 
 int like(Post *head, User *logged)
@@ -628,7 +635,7 @@ int like(Post *head, User *logged)
 
 	Post *cur = NULL;
 	flag = search_post(head, &cur, username, atoi(char_post_id), RETURN_CUR);
-	if (flag < 1)
+	if (flag != FIND || flag != FIND_BUT_HEAD)
 	{
 		printf("Post not found.\n");
 		free(username);
@@ -705,7 +712,7 @@ int delete_post(Post **head, User *logged)
 
 	Post *cur = NULL;
 	flag = search_post(*head, &cur, logged->name, atoi(char_post_id), RETURN_PRE);
-	if (flag < 1)
+	if (flag != FIND || flag != FIND_BUT_HEAD)
 	{
 		printf("Post not found.\n");
 		free(char_post_id);
@@ -715,7 +722,7 @@ int delete_post(Post **head, User *logged)
 	Post *pre;
 	Post *next;
 
-	if (flag == 2)
+	if (flag == FIND_BUT_HEAD)
 	{
 		next = cur->next;
 		*head = next;
@@ -761,7 +768,7 @@ int info(User *user, Post *head, int print_pass)
 	{
 		Post *cur = NULL;
 		int flag = search_post(head, &cur, user->name, i, RETURN_CUR);
-		if (flag >= 1)
+		if (flag == FIND || flag == FIND_BUT_HEAD)
 		{
 			printf("\t\t\\\\\\\\\\\\\\\\\\\n");
 			printf("\t\t\tpost id: %i\n", cur->post_id);
