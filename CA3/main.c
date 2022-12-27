@@ -14,7 +14,7 @@
 #define INFO_SHOW_OTHER_USER_PASS False
 #define SIZE_OF_NULL 1
 
-//define switch return
+// define switch return
 #define TIME_LINE 0
 #define SIGNUP 1
 #define LOGIN 2
@@ -28,24 +28,24 @@
 #define NO_LOGGED 10
 #define INVALID -1
 
-//define get_dynamic_string return
+// define get_dynamic_string return
 #define SUCCESSFUL 1
 #define SUCCESSFUL_NO_CLEAR 2
 #define EMPTY 0
 #define NO_MEMORY -1
 
-//define get_two_arg return
+// define get_two_arg return
 #define SUCCESSFUL_GET_ARG 1
 #define FAILED_ARG_ONE -1
 #define FAILED_ARG_TWO -2
 
-//define search return
+// define search return
 #define FIND 1
 #define FIND_BUT_HEAD 2
 #define NOT_FIND 0
 #define NULL_HEAD -1
 
-//define search_post arg
+// define search_post arg
 #define RETURN_CUR 1
 #define RETURN_PRE 2
 
@@ -56,8 +56,7 @@ typedef struct User
 	char *password;
 	int last_post_id;
 	struct User *next;
-}
-User;
+} User;
 
 typedef struct Post
 {
@@ -68,8 +67,7 @@ typedef struct Post
 	int *users_id_liked;
 	char *txt;
 	struct Post *next;
-}
-Post;
+} Post;
 
 int first_word(User *logged);
 int free_buffer(int mod);
@@ -92,7 +90,7 @@ int info(User *user, Post *head, int print_pass);
 int other_info(User *u_head, Post *p_head);
 int time_line(Post *head);
 
-int main (void)
+int main(void)
 {
 	User *user_head = NULL;
 	User *logged = NULL;
@@ -104,58 +102,58 @@ int main (void)
 		log_state(logged);
 		switch (first_word(logged))
 		{
-			case TIME_LINE:
-				time_line(post_head);
-				break;
-			case SIGNUP:
-				signup(&user_head, &logged);
-				break;
-			case LOGIN:
-				login(user_head, &logged);
-				break;
-			case POST:
-				posting(logged, &post_head);
-				break;
-			case LIKE:
-				like(post_head, logged);
-				break;
-			case LOGOUT:
-				logout(&logged);
-				break;
-			case DELETE:
-				delete_post(&post_head, logged);
-				break;
-			case INFO:
-				info(logged, post_head, INFO_SHOW_PASS);
-				break;
-			case FIND_USER:
-				other_info(user_head, post_head);
-				break;
-			case EXIT:
-				printf("free memory\n");
-				free_memory(user_head, post_head);
-				printf("bye!!\n");
-				return 1;
-			case INVALID:
-				printf("Invalid selection\n");
-				break;
-			case NO_LOGGED:
-				printf("You aren't in your account.\nPlease login and try again.\n");
-				break;
-			default:
-				printf("error\n");
-				printf("free buffer\n");
-				free_buffer(1);
-				break;
+		case TIME_LINE:
+			time_line(post_head);
+			break;
+		case SIGNUP:
+			signup(&user_head, &logged);
+			break;
+		case LOGIN:
+			login(user_head, &logged);
+			break;
+		case POST:
+			posting(logged, &post_head);
+			break;
+		case LIKE:
+			like(post_head, logged);
+			break;
+		case LOGOUT:
+			logout(&logged);
+			break;
+		case DELETE:
+			delete_post(&post_head, logged);
+			break;
+		case INFO:
+			info(logged, post_head, INFO_SHOW_PASS);
+			break;
+		case FIND_USER:
+			other_info(user_head, post_head);
+			break;
+		case EXIT:
+			printf("free memory\n");
+			free_memory(user_head, post_head);
+			printf("bye!!\n");
+			return 1;
+		case INVALID:
+			printf("Invalid selection\n");
+			break;
+		case NO_LOGGED:
+			printf("You aren't in your account.\nPlease login and try again.\n");
+			break;
+		default:
+			printf("error\n");
+			printf("free buffer\n");
+			free_buffer(1);
+			break;
 		}
 	}
 	return -1;
 }
 
-//get first word and return that switch
+// get first word and return that switch
 int first_word(User *logged)
 {
-	//get input and tolower that
+	// get input and tolower that
 	char first_word[FIRST_WORD_LENGHT];
 	char c = '\0';
 	int counter = 0;
@@ -176,9 +174,8 @@ int first_word(User *logged)
 	{
 		first_word[i] = tolower(first_word[i]);
 	}
-	
 
-	//find switch
+	// find switch
 	int return_val = INVALID;
 	if (!strcmp(first_word, "time_line"))
 		return_val = TIME_LINE;
@@ -225,9 +222,9 @@ int first_word(User *logged)
 	return return_val;
 }
 
-//return True if free and False if not
-//mod 1: flag False when get every char
-//mod 2: flag False when get char expect (space)
+// return True if free and False if not
+// mod 1: flag False when get every char
+// mod 2: flag False when get char expect (space)
 int free_buffer(int mod)
 {
 	char c;
@@ -246,14 +243,14 @@ int signup(User **head, User **logged)
 		free_buffer(1);
 		return -1;
 	}
-	
+
 	char *name = NULL;
 	char *password = NULL;
 	int flag = get_two_arg(&name, &password);
 	if (flag != SUCCESSFUL_GET_ARG)
 		return -2;
-	
-	//add to linke list and set data
+
+	// add to linke list and set data
 	User *last_user = NULL;
 	if (search_name(*head, &last_user, name) == FIND)
 	{
@@ -263,7 +260,7 @@ int signup(User **head, User **logged)
 		return -3;
 	}
 
-	User *new_user = (User *) malloc(sizeof(User));
+	User *new_user = (User *)malloc(sizeof(User));
 	if (new_user == NULL)
 	{
 		printf("Can't get memory for signup\nTry again\n");
@@ -286,25 +283,25 @@ int signup(User **head, User **logged)
 
 	user_id++;
 
-	if(LOGIN_AFTER_SIGNIN)
+	if (LOGIN_AFTER_SIGNIN)
 		*logged = new_user;
 
 	printf("\\\\\\\\\\\\\\\\\n");
 	printf("id: %i\nname: %s\npassword: %s\n", new_user->user_id, new_user->name, new_user->password);
 	printf("\\\\\\\\\\\\\\\\\n");
-	
+
 	return 1;
 }
 
-//mod 1 : end when receive (space)
-//mod 2 : end when receive (\n)
-//mod 3 : end when receive (space) or (\n) and clear buffer
+// mod 1 : end when receive (space)
+// mod 2 : end when receive (\n)
+// mod 3 : end when receive (space) or (\n) and clear buffer
 //
-//return SUCCESSFUL_NO_CLEAR if succesful in mod 3 with no clear buffer
-//return SUCCESSFUL if succseful in mod 1, 2 and mod 3 with clear buffer
-//return EMPTY if buffer is empty
-//return NO_MEMORY if unsuccesful to get memory
-//WARNING: if func return SUCCESSFUL_NO_CLEAR string not free
+// return SUCCESSFUL_NO_CLEAR if succesful in mod 3 with no clear buffer
+// return SUCCESSFUL if succseful in mod 1, 2 and mod 3 with clear buffer
+// return EMPTY if buffer is empty
+// return NO_MEMORY if unsuccesful to get memory
+// WARNING: if func return SUCCESSFUL_NO_CLEAR string not free
 int get_dynamic_string(char **output, int mod)
 {
 	char *string = NULL;
@@ -313,14 +310,14 @@ int get_dynamic_string(char **output, int mod)
 	while (((c = getchar()) != ' ' || mod == 2) && (c != '\n' || mod == 1))
 	{
 		len++;
-		string = (char *) realloc(string, len * sizeof(char));
+		string = (char *)realloc(string, len * sizeof(char));
 		if (string == NULL)
 		{
 			printf("Can't get memory for dynamic string\n");
 			free(string);
 			return NO_MEMORY;
 		}
-		string[len-1] = c;
+		string[len - 1] = c;
 	}
 
 	if (len == 0)
@@ -329,8 +326,8 @@ int get_dynamic_string(char **output, int mod)
 		return EMPTY;
 	}
 
-	//add NULL
-	string = (char *) realloc(string, (len + 1) * sizeof(char));
+	// add NULL
+	string = (char *)realloc(string, (len + 1) * sizeof(char));
 	if (string == NULL)
 	{
 		printf("Can't get memory for dynamic string\n");
@@ -353,9 +350,9 @@ int get_dynamic_string(char **output, int mod)
 	return SUCCESSFUL;
 }
 
-//return FIND if find and else return NOT_FIND
-//save user addres or last user in cur
-//args: first pointer of user linked list - pointer to pointer for save user pointer - name of user
+// return FIND if find and else return NOT_FIND
+// save user addres or last user in cur
+// args: first pointer of user linked list - pointer to pointer for save user pointer - name of user
 int search_name(User *head, User **target, char *name)
 {
 	User *cur = head;
@@ -368,7 +365,7 @@ int search_name(User *head, User **target, char *name)
 			*target = cur;
 			return FIND;
 		}
-		
+
 		pre = cur;
 		cur = cur->next;
 	}
@@ -377,7 +374,7 @@ int search_name(User *head, User **target, char *name)
 	return NOT_FIND;
 }
 
-//free memory
+// free memory
 int free_memory(User *user_head, Post *post_head)
 {
 	User *u_cur = user_head;
@@ -387,7 +384,7 @@ int free_memory(User *user_head, Post *post_head)
 	{
 		free(u_cur->name);
 		free(u_cur->password);
-		
+
 		u_pre = u_cur;
 		u_cur = u_cur->next;
 
@@ -401,7 +398,7 @@ int free_memory(User *user_head, Post *post_head)
 	{
 		free(p_cur->txt);
 		free(p_cur->users_id_liked);
-		
+
 		p_pre = p_cur;
 		p_cur = p_cur->next;
 
@@ -411,10 +408,10 @@ int free_memory(User *user_head, Post *post_head)
 	return 1;
 }
 
-//print loggin state
+// print loggin state
 void log_state(User *logged)
 {
-	if(logged == NULL)
+	if (logged == NULL)
 	{
 		printf("\nYou aren't logged in. Log in for more features!\n");
 	}
@@ -432,7 +429,7 @@ int login(User *head, User **logged)
 	int flag = get_two_arg(&name, &password);
 	if (flag != SUCCESSFUL_GET_ARG)
 		return -1;
-	
+
 	if (*logged != NULL)
 	{
 		printf("You are in an account.\nPlease logout and try again\n");
@@ -449,7 +446,7 @@ int login(User *head, User **logged)
 		return -3;
 	}
 
-	if(strcmp(profile->password, password))
+	if (strcmp(profile->password, password))
 	{
 		printf("Password incorrect\nTry again\n");
 		free(name);
@@ -464,8 +461,8 @@ int login(User *head, User **logged)
 	return 1;
 }
 
-//get two argument (example: name and password) and check that and buffer
-//return 1 if successful if can't get arg 1 return -1 and can't get arg 2 return -2
+// get two argument (example: name and password) and check that and buffer
+// return 1 if successful if can't get arg 1 return -1 and can't get arg 2 return -2
 int get_two_arg(char **arg1, char **arg2)
 {
 	int flag = get_dynamic_string(arg1, 1);
@@ -495,7 +492,7 @@ int logout(User **logged)
 		printf("You are already logout.\n");
 		return 0;
 	}
-	
+
 	*logged = NULL;
 	printf("You have successfully logged out\nSee you later!!\n");
 	return 1;
@@ -533,7 +530,7 @@ int posting(User *logged, Post **head)
 		return -2;
 	}
 
-	Post *new_post = (Post *) malloc(sizeof(Post));
+	Post *new_post = (Post *)malloc(sizeof(Post));
 	if (new_post == NULL)
 	{
 		printf("Can't allocat memory for post.\nTry again.\n");
@@ -572,14 +569,14 @@ int posting(User *logged, Post **head)
 	printf("like: %i\n", new_post->like);
 	printf("post: %s\n", new_post->txt);
 	printf("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n");
-	
+
 	return 1;
 }
 
-//if find return FIND and if that is head return FIND_BUT_HEAD and else NOT_FIND and NULL_HEAD if head NULL
-//return:
-//if mod RETURN_CUR:return that post
-//if mod RETURN_PRE:return before post
+// if find return FIND and if that is head return FIND_BUT_HEAD and else NOT_FIND and NULL_HEAD if head NULL
+// return:
+// if mod RETURN_CUR:return that post
+// if mod RETURN_PRE:return before post
 int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 {
 	if (head == NULL)
@@ -646,13 +643,13 @@ int like(Post *head, User *logged)
 	int *cur_to_like = NULL;
 	if (FIND == search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
 	{
-		printf ("You already liked this post.\n");
+		printf("You already liked this post.\n");
 		free(username);
 		free(char_post_id);
 		return -5;
 	}
-	
-	cur->users_id_liked = (int *) realloc(cur->users_id_liked, (cur->like + 1) * sizeof(int));
+
+	cur->users_id_liked = (int *)realloc(cur->users_id_liked, (cur->like + 1) * sizeof(int));
 	if (cur->users_id_liked == NULL)
 	{
 		printf("can't allocat memory for save your id in the post for like.\nTry again.\n");
@@ -673,8 +670,8 @@ int like(Post *head, User *logged)
 	return 1;
 }
 
-//return FIND if find and else NOT_FIND
-//cur linked to id if not save last
+// return FIND if find and else NOT_FIND
+// cur linked to id if not save last
 int search_liked_user(int *head, int like, int id, int **cur)
 {
 	for (int i = 0; i < like; i++)
@@ -702,7 +699,7 @@ int delete_post(Post **head, User *logged)
 			free(char_post_id);
 		return -2;
 	}
-	
+
 	if (!is_number(char_post_id))
 	{
 		printf("Invalid post id.\nTry again.\n");
@@ -730,22 +727,22 @@ int delete_post(Post **head, User *logged)
 	else
 	{
 		pre = cur;
-        cur = cur->next;
-        next = cur->next;
+		cur = cur->next;
+		next = cur->next;
 
-        pre->next = next;
+		pre->next = next;
 	}
 
-        free(cur->txt);
-        free(cur->users_id_liked);
-        free(cur);
-	
+	free(cur->txt);
+	free(cur->users_id_liked);
+	free(cur);
+
 	free(char_post_id);
 
 	return 1;
 }
 
-//if input is number retrun True else False
+// if input is number retrun True else False
 int is_number(char *number)
 {
 	for (int i = 0; i < strlen(number); i++)
@@ -803,7 +800,7 @@ int other_info(User *u_head, Post *p_head)
 		return -1;
 	}
 
-	info(user, p_head,INFO_SHOW_OTHER_USER_PASS);
+	info(user, p_head, INFO_SHOW_OTHER_USER_PASS);
 
 	free(username);
 	return 1;
