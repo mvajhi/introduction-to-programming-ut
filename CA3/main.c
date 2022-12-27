@@ -14,6 +14,7 @@
 #define INFO_SHOW_OTHER_USER_PASS False
 #define RETURN_CUR 1
 #define RETURN_PRE 2
+#define SIZE_OF_NULL 1
 
 //switch return define
 #define TIME_LINE 0
@@ -136,7 +137,19 @@ int first_word()
 {
 	//get input and tolower that
 	char first_word[FIRST_WORD_LENGHT];
-	scanf("%s", first_word);
+	char c = '\0';
+	int counter = 0;
+	while ((c = getchar()) != ' ' && c != '\n')
+	{
+		first_word[counter] = c;
+		counter++;
+		if (counter == (FIRST_WORD_LENGHT - SIZE_OF_NULL))
+		{
+			return INVALID;
+		}
+	}
+
+	first_word[counter] = '\0';
 
 	for (int i = 0; i < strlen(first_word); i++)
 	{
@@ -178,10 +191,6 @@ int first_word()
 
 	else
 		return INVALID;
-
-	//apart from exit and time line, the others get more than argument
-	//remove space
-	char c = getchar();
 
 	return return_val;
 }
