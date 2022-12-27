@@ -15,6 +15,19 @@
 #define RETURN_CUR 1
 #define RETURN_PRE 2
 
+//switch return define
+#define TIME_LINE 0
+#define SIGNUP 1
+#define LOGIN 2
+#define POST 3
+#define LIKE 4
+#define LOGOUT 5
+#define DELETE 6
+#define INFO 7
+#define FIND_USER 8
+#define EXIT 9
+#define INVALID -1
+
 typedef struct User
 {
 	int user_id;
@@ -71,39 +84,39 @@ int main (void)
 		log_state(logged);
 		switch (first_word())
 		{
-			case 0:
+			case TIME_LINE:
 				time_line(post_head, logged);
 				break;
-			case 1:
+			case SIGNUP:
 				signup(&user_head, &logged);
 				break;
-			case 2:
+			case LOGIN:
 				login(user_head, &logged);
 				break;
-			case 3:
+			case POST:
 				posting(logged, &post_head);
 				break;
-			case 4:
+			case LIKE:
 				like(post_head, logged);
 				break;
-			case 5:
+			case LOGOUT:
 				logout(&logged);
 				break;
-			case 6:
+			case DELETE:
 				delete_post(&post_head, logged);
 				break;
-			case 7:
+			case INFO:
 				logged_info(logged, post_head);
 				break;
-			case 8:
+			case FIND_USER:
 				other_info(user_head, post_head, logged);
 				break;
-			case 9:
+			case EXIT:
 				printf("free memory\n");
 				free_memory(user_head, post_head);
 				printf("bye!!\n");
 				return 1;
-			case -1:
+			case INVALID:
 				printf("Invalid selection\n");
 				printf("free buffer\n");
 				free_buffer(1);
@@ -132,39 +145,39 @@ int first_word()
 	
 
 	//find switch
-	int return_val = -2;
+	int return_val = INVALID;
 	if (!strcmp(first_word, "time_line"))
-		return 0;
+		return TIME_LINE;
 
 	else if (!strcmp(first_word, "signup"))
-		return_val = 1;
+		return_val = SIGNUP;
 
 	else if (!strcmp(first_word, "login"))
-		return_val = 2;
+		return_val = LOGIN;
 
 	else if (!strcmp(first_word, "post"))
-		return_val = 3;
+		return_val = POST;
 
 	else if (!strcmp(first_word, "like"))
-		return_val = 4;
+		return_val = LIKE;
 
 	else if (!strcmp(first_word, "logout"))
-		return_val = 5;
+		return_val = LOGOUT;
 
 	else if (!strcmp(first_word, "delete"))
-		return_val = 6;
+		return_val = DELETE;
 
 	else if (!strcmp(first_word, "info"))
-		return_val = 7;
+		return_val = INFO;
 
 	else if (!strcmp(first_word, "find_user"))
-		return_val = 8;
+		return_val = FIND_USER;
 
 	else if (!strcmp(first_word, "exit"))
-		return 9;
+		return EXIT;
 
 	else
-		return -1;
+		return INVALID;
 
 	//apart from exit and time line, the others get more than argument
 	//remove space
