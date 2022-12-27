@@ -374,27 +374,39 @@ int login(User *head, User **logged)
 	char *password = NULL;
 	int flag = get_two_arg(&name, &password);
 	if (flag != 1)
+	{
+		free(name);
+		free(password);
 		return -1;
+	}
 	
 	if (*logged != NULL)
 	{
 		printf("You are in an account.\nPlease logout and try again\n");
+		free(name);
+		free(password);
 		return -2;
 	}
 
 	if (!search_name(head, &profile, name))
 	{
 		printf("User not found\nTry again\n");
+		free(name);
+		free(password);
 		return -3;
 	}
 
 	if(strcmp(profile->password, password))
 	{
 		printf("Password incorrect\nTry again\n");
+		free(name);
+		free(password);
 		return -4;
 	}
 
 	*logged = profile;
+	free(name);
+	free(password);
 
 	return 1;
 }
@@ -697,6 +709,8 @@ int delete_post(Post **head, User *logged)
         free(cur->txt);
         free(cur->users_id_liked);
         free(cur);
+	
+	free(char_post_id);
 
 	return 1;
 }
