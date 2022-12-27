@@ -256,7 +256,6 @@ int signup(User **head, User **logged)
 	}
 
 	User *new_user = (User *) malloc(sizeof(User));
-	
 	if (new_user == NULL)
 	{
 		printf("Can't get memory for signup\nTry again\n");
@@ -271,21 +270,19 @@ int signup(User **head, User **logged)
 	new_user->password = password;
 	new_user->last_post_id = FIRST_POST_ID;
 	new_user->next = NULL;
+
 	if (*head == NULL)
-	{
 		*head = new_user;
-	}
 	else
-	{
 		last_user->next = new_user;
-	}
+
 	user_id++;
 
 	if(LOGIN_AFTER_SIGNIN)
 		*logged = new_user;
 
 	printf("\\\\\\\\\\\\\\\\\n");
-	printf("id: %i\nname: %s\npassword: %s\npost_id: %i\n", new_user->user_id, new_user->name, new_user->password, new_user->last_post_id);
+	printf("id: %i\nname: %s\npassword: %s\n", new_user->user_id, new_user->name, new_user->password);
 	printf("\\\\\\\\\\\\\\\\\n");
 	
 	return 1;
@@ -299,6 +296,7 @@ int signup(User **head, User **logged)
 //return SUCCESSFUL if succseful in mod 1, 2 and mod 3 with clear buffer
 //return EMPTY if buffer is empty
 //return NO_MEMORY if unsuccesful to get memory
+//WARNING: if func return SUCCESSFUL_NO_CLEAR string not free
 int get_dynamic_string(char **output, int mod)
 {
 	char *string = NULL;
@@ -325,6 +323,13 @@ int get_dynamic_string(char **output, int mod)
 
 	//add NULL
 	string = (char *) realloc(string, (len + 1) * sizeof(char));
+	if (string == NULL)
+	{
+		printf("Can't get memory for dynamic string\n");
+		free(string);
+		return NO_MEMORY;
+	}
+
 	string[len] = '\0';
 	*output = string;
 
@@ -459,7 +464,6 @@ int get_two_arg(char **arg1, char **arg2)
 	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat arg1\nTry again\n", flag);
-		free(*arg1);
 		return FAILED_ARG_ONE;
 	}
 
@@ -468,7 +472,8 @@ int get_two_arg(char **arg1, char **arg2)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat arg2\nTry again\n", flag);
 		free(*arg1);
-		free(*arg2);
+		if (flag == SUCCESSFUL_NO_CLEAR)
+			free(*arg2);
 		return FAILED_ARG_TWO;
 	}
 
@@ -517,7 +522,6 @@ int posting(User *logged, Post **head)
 	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\nSomthing wrong in dynamic allocat text.\nTry again\n", flag);
-		free(txt);
 		return -2;
 	}
 
@@ -687,7 +691,8 @@ int delete_post(Post **head, User *logged)
 	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\ncan't get post id.\nTry again.\n", flag);
-		free(char_post_id);
+		if (flag == SUCCESSFUL_NO_CLEAR)
+			free(char_post_id);
 		return -2;
 	}
 	
@@ -777,7 +782,8 @@ int other_info(User *u_head, Post *p_head)
 	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\ncan't get username.\nTry again.\n", flag);
-		free(username);
+		if (flag == SUCCESSFUL_NO_CLEAR)
+			free(username);
 		return -2;
 	}
 
