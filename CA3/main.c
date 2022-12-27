@@ -542,6 +542,7 @@ int posting(User *logged, Post **head)
 	new_post->user_id = logged->user_id;
 	new_post->user_name = logged->name;
 	new_post->like = 0;
+	new_post->users_id_liked = NULL;
 	new_post->txt = txt;
 	new_post->next = NULL;
 
@@ -632,7 +633,7 @@ int like(Post *head, User *logged)
 
 	Post *cur = NULL;
 	flag = search_post(head, &cur, username, atoi(char_post_id), RETURN_CUR);
-	if (flag != FIND || flag != FIND_BUT_HEAD)
+	if (flag != FIND && flag != FIND_BUT_HEAD)
 	{
 		printf("Post not found.\n");
 		free(username);
@@ -709,7 +710,7 @@ int delete_post(Post **head, User *logged)
 
 	Post *cur = NULL;
 	flag = search_post(*head, &cur, logged->name, atoi(char_post_id), RETURN_PRE);
-	if (flag != FIND || flag != FIND_BUT_HEAD)
+	if (flag != FIND && flag != FIND_BUT_HEAD)
 	{
 		printf("Post not found.\n");
 		free(char_post_id);
