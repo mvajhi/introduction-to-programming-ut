@@ -6,7 +6,7 @@
 #define True 1
 #define False 0
 
-#define FIRST_WORD_LENGHT 10
+#define FIRST_WORD_LENGHT 15
 #define FIRST_USER_ID 1
 #define FIRST_POST_ID 0
 #define LOGIN_AFTER_SIGNIN True
@@ -16,7 +16,7 @@
 #define RETURN_PRE 2
 #define SIZE_OF_NULL 1
 
-//switch return define
+//define switch return
 #define TIME_LINE 0
 #define SIGNUP 1
 #define LOGIN 2
@@ -27,7 +27,14 @@
 #define INFO 7
 #define FIND_USER 8
 #define EXIT 9
+#define NO_LOGGED 10
 #define INVALID -1
+
+//define get_dynamic_string return
+#define SUCCESSFUL 1
+#define SUCCESSFUL_NO_CLEAR 2
+#define EMPTY 0
+#define NO_MEMORY -1
 
 typedef struct User
 {
@@ -51,7 +58,7 @@ typedef struct Post
 }
 Post;
 
-int first_word();
+int first_word(User *logged);
 int free_buffer(int mod);
 int signup(User **head, User **logged);
 int get_dynamic_string(char **output, int mod);
@@ -69,9 +76,8 @@ int delete_post(Post **head, User *logged);
 int search_liked_user(int *head, int like, int id, int **cur);
 int is_number(char *number);
 int info(User *user, Post *head, int print_pass);
-int other_info(User *u_head, Post *p_head, User *logged);
-int logged_info(User *logged,Post *post_head);
-int time_line(Post *head, User *logged);
+int other_info(User *u_head, Post *p_head);
+int time_line(Post *head);
 
 int main (void)
 {
@@ -83,10 +89,10 @@ int main (void)
 	{
 		print_menu(logged);
 		log_state(logged);
-		switch (first_word())
+		switch (first_word(logged))
 		{
 			case TIME_LINE:
-				time_line(post_head, logged);
+				time_line(post_head);
 				break;
 			case SIGNUP:
 				signup(&user_head, &logged);
@@ -107,10 +113,10 @@ int main (void)
 				delete_post(&post_head, logged);
 				break;
 			case INFO:
-				logged_info(logged, post_head);
+				info(logged, post_head, INFO_SHOW_PASS);
 				break;
 			case FIND_USER:
-				other_info(user_head, post_head, logged);
+				other_info(user_head, post_head);
 				break;
 			case EXIT:
 				printf("free memory\n");
@@ -119,8 +125,9 @@ int main (void)
 				return 1;
 			case INVALID:
 				printf("Invalid selection\n");
-				printf("free buffer\n");
-				free_buffer(1);
+				break;
+			case NO_LOGGED:
+				printf("You aren't in your account.\nPlease login and try again.\n");
 				break;
 			default:
 				printf("error\n");
@@ -133,7 +140,7 @@ int main (void)
 }
 
 //get first word and return that switch
-int first_word()
+int first_word(User *logged)
 {
 	//get input and tolower that
 	char first_word[FIRST_WORD_LENGHT];
@@ -145,6 +152,7 @@ int first_word()
 		counter++;
 		if (counter == (FIRST_WORD_LENGHT - SIZE_OF_NULL))
 		{
+			free_buffer(1);
 			return INVALID;
 		}
 	}
@@ -160,7 +168,7 @@ int first_word()
 	//find switch
 	int return_val = INVALID;
 	if (!strcmp(first_word, "time_line"))
-		return TIME_LINE;
+		return_val = TIME_LINE;
 
 	else if (!strcmp(first_word, "signup"))
 		return_val = SIGNUP;
@@ -187,10 +195,19 @@ int first_word()
 		return_val = FIND_USER;
 
 	else if (!strcmp(first_word, "exit"))
-		return EXIT;
+		return_val = EXIT;
 
-	else
-		return INVALID;
+	if ((return_val == TIME_LINE || return_val == INFO || return_val == LOGOUT || return_val == EXIT || return_val == INVALID) && c == ' ')
+	{
+		if (!free_buffer(2))
+			return_val = INVALID;
+	}
+	else if ((return_val == TIME_LINE || return_val == POST || return_val == LIKE || return_val == DELETE || return_val == FIND_USER || return_val == INFO) && logged == NULL)
+	{
+		if (c == ' ')
+			free_buffer(1);
+		return_val = NO_LOGGED;
+	}
 
 	return return_val;
 }
@@ -273,10 +290,10 @@ int signup(User **head, User **logged)
 //mod 2 : end when receive (\n)
 //mod 3 : end when receive (space) or (\n) and clear buffer
 //
-//return 2 if succesful in mod 3 with no clear buffer
-//return 1 if succseful in mod 1, 2 and mod 3 with clear buffer
-//return 0 if buffer is empty
-//return -1 if unsuccesful to get memory
+//return SUCCESSFUL_NO_CLEAR if succesful in mod 3 with no clear buffer
+//return SUCCESSFUL if succseful in mod 1, 2 and mod 3 with clear buffer
+//return EMPTY if buffer is empty
+//return NO_MEMORY if unsuccesful to get memory
 int get_dynamic_string(char **output, int mod)
 {
 	char *string = NULL;
@@ -290,7 +307,7 @@ int get_dynamic_string(char **output, int mod)
 		{
 			printf("Can't get memory for dynamic string\n");
 			free(string);
-			return -1;
+			return NO_MEMORY;
 		}
 		string[len-1] = c;
 	}
@@ -298,7 +315,7 @@ int get_dynamic_string(char **output, int mod)
 	if (len == 0)
 	{
 		printf("buffer is empty\n");
-		return 0;
+		return EMPTY;
 	}
 
 	//add NULL
@@ -311,11 +328,11 @@ int get_dynamic_string(char **output, int mod)
 		if (!free_buffer(2))
 		{
 			printf("dynamic allocat succes but buffer have more string\n");
-			return 2;
+			return SUCCESSFUL_NO_CLEAR;
 		}
 	}
 
-	return 1;
+	return SUCCESSFUL;
 }
 
 //return 1 if find and else return 0
@@ -438,7 +455,7 @@ int login(User *head, User **logged)
 int get_two_arg(char **arg1, char **arg2)
 {
 	int flag = get_dynamic_string(arg1, 1);
-	if (flag != 1)
+	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
 		free(*arg1);
@@ -446,7 +463,7 @@ int get_two_arg(char **arg1, char **arg2)
 	}
 
 	flag = get_dynamic_string(arg2, 3);
-	if (flag != 1)
+	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
 		free(*arg1);
@@ -494,16 +511,9 @@ void print_menu(User *logged)
 
 int posting(User *logged, Post **head)
 {
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		free_buffer(1);
-		return -1;
-	}
-
 	char *txt = NULL;
 	int flag = get_dynamic_string(&txt, 2);
-	if (flag != 1)
+	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\nSomthing wrong in dynamic allocat text.\nTry again\n", flag);
 		free(txt);
@@ -597,12 +607,6 @@ int search_post(Post *head, Post **target, char *username, int post_id, int mod)
 
 int like(Post *head, User *logged)
 {
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		free_buffer(1);
-		return -1;
-	}
 	char *username = NULL;
 	char *char_post_id = NULL;
 	int flag = get_two_arg(&username, &char_post_id);
@@ -678,17 +682,10 @@ int search_liked_user(int *head, int like, int id, int **cur)
 
 int delete_post(Post **head, User *logged)
 {
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		free_buffer(1);
-		return -1;
-	}
-
 	char *char_post_id = NULL;
 	int flag = get_dynamic_string(&char_post_id, 3);
 
-	if (flag != 1)
+	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\ncan't get post id.\nTry again.\n", flag);
 		free(char_post_id);
@@ -773,19 +770,12 @@ int info(User *user, Post *head, int print_pass)
 	return 1;
 }
 
-int other_info(User *u_head, Post *p_head, User *logged)
+int other_info(User *u_head, Post *p_head)
 {
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		free_buffer(1);
-		return -1;
-	}
-
 	char *username = NULL;
 	int flag = get_dynamic_string(&username, 3);
 
-	if (flag != 1)
+	if (flag != SUCCESSFUL)
 	{
 		printf("error %i\ncan't get username.\nTry again.\n", flag);
 		free(username);
@@ -807,27 +797,8 @@ int other_info(User *u_head, Post *p_head, User *logged)
 	return 1;
 }
 
-int logged_info(User *logged,Post *post_head)
+int time_line(Post *head)
 {
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		return -1;
-	}
-
-	info(logged, post_head, INFO_SHOW_PASS);
-
-	return 1;
-}
-
-int time_line(Post *head, User *logged)
-{
-	if (logged == NULL)
-	{
-		printf("You aren't in your account.\nPlease login and try again.\n");
-		return -1;
-	}
-
 	Post *cur = head;
 
 	while (cur != NULL)
