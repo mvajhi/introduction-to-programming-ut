@@ -39,7 +39,7 @@
 #define FAILED_ARG_ONE -1
 #define FAILED_ARG_TWO -2
 
-//define search_post return
+//define search return
 #define FIND 1
 #define FIND_BUT_HEAD 2
 #define NOT_FIND 0
@@ -255,7 +255,7 @@ int signup(User **head, User **logged)
 	
 	//add to linke list and set data
 	User *last_user = NULL;
-	if (search_name(*head, &last_user, name))
+	if (search_name(*head, &last_user, name) == FIND)
 	{
 		printf("This name is already exist\nTry again with another name\n");
 		free(name);
@@ -353,7 +353,7 @@ int get_dynamic_string(char **output, int mod)
 	return SUCCESSFUL;
 }
 
-//return 1 if find and else return 0
+//return FIND if find and else return NOT_FIND
 //save user addres or last user in cur
 //args: first pointer of user linked list - pointer to pointer for save user pointer - name of user
 int search_name(User *head, User **target, char *name)
@@ -366,7 +366,7 @@ int search_name(User *head, User **target, char *name)
 		if (!strcmp(cur->name, name))
 		{
 			*target = cur;
-			return 1;
+			return FIND;
 		}
 		
 		pre = cur;
@@ -374,7 +374,7 @@ int search_name(User *head, User **target, char *name)
 	}
 
 	*target = pre;
-	return 0;
+	return NOT_FIND;
 }
 
 //free memory
@@ -441,7 +441,7 @@ int login(User *head, User **logged)
 		return -2;
 	}
 
-	if (!search_name(head, &profile, name))
+	if (search_name(head, &profile, name) == NOT_FIND)
 	{
 		printf("User not found\nTry again\n");
 		free(name);
@@ -644,7 +644,7 @@ int like(Post *head, User *logged)
 	}
 
 	int *cur_to_like = NULL;
-	if (search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
+	if (FIND == search_liked_user(cur->users_id_liked, cur->like, logged->user_id, &cur_to_like))
 	{
 		printf ("You already liked this post.\n");
 		free(username);
@@ -673,7 +673,7 @@ int like(Post *head, User *logged)
 	return 1;
 }
 
-//return 1 if find and else 0
+//return FIND if find and else NOT_FIND
 //cur linked to id if not save last
 int search_liked_user(int *head, int like, int id, int **cur)
 {
@@ -682,12 +682,12 @@ int search_liked_user(int *head, int like, int id, int **cur)
 		if (head[i] == id)
 		{
 			*cur = head + i;
-			return 1;
+			return FIND;
 		}
 	}
 
 	*cur = head + like - 1;
-	return 0;
+	return NOT_FIND;
 }
 
 int delete_post(Post **head, User *logged)
@@ -796,7 +796,7 @@ int other_info(User *u_head, Post *p_head)
 
 	User *user = NULL;
 	flag = search_name(u_head, &user, username);
-	if (flag == 0)
+	if (flag == NOT_FIND)
 	{
 		printf("User not found.\n");
 		free(username);
