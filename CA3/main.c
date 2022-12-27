@@ -36,6 +36,11 @@
 #define EMPTY 0
 #define NO_MEMORY -1
 
+//define get_two_arg return
+#define SUCCESSFUL_GET_ARG 1
+#define FAILED_ARG_ONE -1
+#define FAILED_ARG_TWO -2
+
 typedef struct User
 {
 	int user_id;
@@ -237,7 +242,7 @@ int signup(User **head, User **logged)
 	char *name = NULL;
 	char *password = NULL;
 	int flag = get_two_arg(&name, &password);
-	if (flag != 1)
+	if (flag != SUCCESSFUL_GET_ARG)
 		return -2;
 	
 	//add to linke list and set data
@@ -412,12 +417,8 @@ int login(User *head, User **logged)
 	char *name = NULL;
 	char *password = NULL;
 	int flag = get_two_arg(&name, &password);
-	if (flag != 1)
-	{
-		free(name);
-		free(password);
+	if (flag != SUCCESSFUL_GET_ARG)
 		return -1;
-	}
 	
 	if (*logged != NULL)
 	{
@@ -457,21 +458,21 @@ int get_two_arg(char **arg1, char **arg2)
 	int flag = get_dynamic_string(arg1, 1);
 	if (flag != SUCCESSFUL)
 	{
-		printf("error %i\nsomthing wrong in dynamic allocat name\nTry again\n", flag);
+		printf("error %i\nsomthing wrong in dynamic allocat arg1\nTry again\n", flag);
 		free(*arg1);
-		return -1;
+		return FAILED_ARG_ONE;
 	}
 
 	flag = get_dynamic_string(arg2, 3);
 	if (flag != SUCCESSFUL)
 	{
-		printf("error %i\nsomthing wrong in dynamic allocat password\nTry again\n", flag);
+		printf("error %i\nsomthing wrong in dynamic allocat arg2\nTry again\n", flag);
 		free(*arg1);
 		free(*arg2);
-		return -2;
+		return FAILED_ARG_TWO;
 	}
 
-	return 1;
+	return SUCCESSFUL_GET_ARG;
 }
 
 int logout(User **logged)
@@ -610,10 +611,8 @@ int like(Post *head, User *logged)
 	char *username = NULL;
 	char *char_post_id = NULL;
 	int flag = get_two_arg(&username, &char_post_id);
-	if (flag != 1)
-	{
+	if (flag != SUCCESSFUL_GET_ARG)
 		return -2;
-	}
 
 	if (!is_number(char_post_id))
 	{
