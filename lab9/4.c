@@ -3,6 +3,8 @@
 
 #define ZERO 0
 #define ONE 1
+#define true 1
+#define false 0
 
 typedef struct icsp_student icsp_std;
 struct icsp_student {
@@ -43,7 +45,7 @@ icsp_std** read_students_credentials_from_file(char* file_name) {
 	FILE* input;
 	if (input = fopen(file_name, "r")) {
 		int num_of_lines = atoi(read_line_from_input_file(input));
-		icsp_std** students = (icsp_student**)malloc(sizeof(icsp_std*) * num_of_lines);
+		icsp_std** students = (icsp_std**)malloc(sizeof(icsp_std*) * num_of_lines);
 		for (int i = 0; i < num_of_lines; i++) {
 			icsp_std* std = (icsp_std*)malloc(sizeof(icsp_std));
 			std->first_name = read_line_from_input_file(input);

@@ -12,12 +12,15 @@ struct icsp_student {
 	struct icsp_student *next;
 };
 
-icsp_std find(int id, icsp_std *head)
+icsp_std *find(int id, icsp_std *head)
 {
 	icsp_std *cur = head;
 	while (cur != NULL)
+	{
 		if (cur->student_number == id)
 			return cur;
+		cur = cur->next;
+	}
 	printf("NOT FOUND\n");
 	return NULL;
 }
