@@ -5,28 +5,6 @@
 
 #include "headers.h"
 
-#define FIRST_WORD_LENGHT 15
-#define FIRST_USER_ID 1
-#define FIRST_POST_ID 0
-#define LOGIN_AFTER_SIGNIN True
-#define INFO_SHOW_PASS True
-#define INFO_SHOW_OTHER_USER_PASS False
-#define SIZE_OF_NULL 1
-
-// define switch return
-#define TIME_LINE 0
-#define SIGNUP 1
-#define LOGIN 2
-#define POST 3
-#define LIKE 4
-#define LOGOUT 5
-#define DELETE 6
-#define INFO 7
-#define FIND_USER 8
-#define EXIT 9
-#define NO_LOGGED 10
-#define INVALID -1
-
 // get first word and return that switch
 int first_word(User *logged)
 {
@@ -98,7 +76,6 @@ int first_word(User *logged)
 
 	return return_val;
 }
-
 
 void print_menu(User *logged)
 {

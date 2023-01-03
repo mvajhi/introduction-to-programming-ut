@@ -5,29 +5,6 @@
 
 #include "headers.h"
 
-// define get_dynamic_string return
-#define SUCCESSFUL 1
-#define SUCCESSFUL_NO_CLEAR 2
-#define EMPTY 0
-#define NO_MEMORY -1
-
-// define get_two_arg return
-#define SUCCESSFUL_GET_ARG 1
-#define FAILED_ARG_ONE -1
-#define FAILED_ARG_TWO -2
-
-// define search return
-#define FIND 1
-#define FIND_BUT_HEAD 2
-#define NOT_FIND 0
-#define NULL_HEAD -1
-
-// define search_post arg
-#define RETURN_CUR 1
-#define RETURN_PRE 2
-
-
-
 int posting(User *logged, Post **head)
 {
 	char *txt = NULL;
@@ -179,7 +156,7 @@ int like(Post *head, User *logged)
 	return 1;
 }
 
-//print all posts
+// print all posts
 int time_line(Post *head)
 {
 	Post *cur = head;

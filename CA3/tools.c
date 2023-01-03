@@ -5,20 +5,6 @@
 
 #include "headers.h"
 
-#define True 1
-#define False 0
-
-// define get_dynamic_string return
-#define SUCCESSFUL 1
-#define SUCCESSFUL_NO_CLEAR 2
-#define EMPTY 0
-#define NO_MEMORY -1
-
-// define get_two_arg return
-#define SUCCESSFUL_GET_ARG 1
-#define FAILED_ARG_ONE -1
-#define FAILED_ARG_TWO -2
-
 // return True if free and False if not
 // mod 1: flag False when get every char
 // mod 2: flag False when get char expect (space)

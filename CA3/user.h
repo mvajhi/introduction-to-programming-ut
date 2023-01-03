@@ -1,4 +1,3 @@
-#include "define.h"
 int signup(User **head, User **logged);
 void log_state(User *logged);
 int login(User *head, User **logged);
