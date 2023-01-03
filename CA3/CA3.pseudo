@@ -1,0 +1,69 @@
+struct User {
+    let id
+    let name
+    let password
+    let last_post_id
+    let next_pointer
+}
+struct Post {
+    let user_id
+    let user_name
+    let post id
+    let like
+    let user_liked_linklist
+    let next_pointer
+}
+
+function main
+    while (user want to exit) 
+        input
+        check input and logged_uesr
+        goto select function
+        if something wrong in functions
+            print "Try again"
+    free_memory
+end
+
+function time_line
+    print posts in linklist
+
+function signup
+    input
+    check input
+    save in User linklist
+
+function login
+    input
+    check input (user and password)
+    set logged_uesr
+
+function logout
+    clear logged_uesr
+
+function post
+    input
+    check input
+    save post in linklist
+
+function like
+    input
+    check input
+    find post
+    add user_id to user_liked_linklist
+    like++
+
+function delete_post
+    input
+    check input
+    find post
+    remove post in linklist
+
+function info
+    print logged_uesr information and posts
+    
+function find_user
+    input
+    check input
+    find input
+    print find_user information and posts
+
