@@ -245,3 +245,17 @@ int search_liked_user(int *head, int like, int id, int **cur)
 	*cur = head + like - 1;
 	return NOT_FIND;
 }
+
+//return how meny post this user id send
+int post_counter(Post *head, int user_id)
+{
+	Post *cur = head;
+	int counter = 0;
+	while (cur != NULL)
+	{
+		if (cur->user_id == user_id)
+			counter++;
+		cur = cur->next;
+	}
+	return counter;
+}

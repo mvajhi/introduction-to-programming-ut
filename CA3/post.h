@@ -4,3 +4,4 @@ int like(Post *head, User *logged);
 int time_line(Post *head);
 int delete_post(Post **head, User *logged);
 int search_liked_user(int *head, int like, int id, int **cur);
+int post_counter(Post *head, int user_id);

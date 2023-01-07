@@ -31,6 +31,8 @@ typedef struct Post
 #define INFO_SHOW_PASS True
 #define INFO_SHOW_OTHER_USER_PASS False
 #define SIZE_OF_NULL 1
+#define POST_OUTPUT "posts.txt"
+#define USER_OUTPUT "accounts.txt"
 
 // define switch return
 #define TIME_LINE 0
@@ -44,6 +46,7 @@ typedef struct Post
 #define FIND_USER 8
 #define EXIT 9
 #define NO_LOGGED 10
+#define EXPORT 11
 #define INVALID -1
 
 // define get_dynamic_string return

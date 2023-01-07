@@ -1,0 +1,6 @@
+hi mahdi 1
+i am mahdi mahdi 2
+bye mahdi 0
+i am ali ali 0
+i hate mahdi ali 1
+bye ali 0

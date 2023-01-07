@@ -62,7 +62,10 @@ int first_word(User *logged)
 	else if (!strcmp(first_word, "exit"))
 		return_val = EXIT;
 
-	if ((return_val == TIME_LINE || return_val == INFO || return_val == LOGOUT || return_val == EXIT || return_val == INVALID) && c == ' ')
+	else if (!strcmp(first_word, "export"))
+		return_val = EXPORT;
+
+	if ((return_val == TIME_LINE || return_val == INFO || return_val == LOGOUT || return_val == EXIT || return_val == INVALID || return_val == EXPORT) && c == ' ')
 	{
 		if (!free_buffer(2))
 			return_val = INVALID;
@@ -94,6 +97,7 @@ void print_menu(User *logged)
 		printf("\tdelete <post id>\n");
 		printf("\tinfo\n");
 		printf("\tfind_user <username>\n");
+		printf("\texport\n");
 		printf("\tlogout\n");
 		printf("\texit\n");
 	}

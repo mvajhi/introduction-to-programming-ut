@@ -44,6 +44,9 @@ int main(void)
 		case FIND_USER:
 			other_info(user_head, post_head);
 			break;
+		case EXPORT:
+			export_file(user_head, post_head);
+			break;
 		case EXIT:
 			printf("free memory\n");
 			free_memory(user_head, post_head);
