@@ -2,15 +2,17 @@
 
 int main()
 {
-	int *p = (int *)malloc(10 * sizeof(int));
-	int i;
-	printf("P = 0x%p\n", p);
-	for (i = 0; i < 10; i++)
-	{
-		p[i] = i;
-	}
-	free(p);
-	printf("P = 0x%p\n", p);
-	printf("P[0] =%d", *p);
+int n = 123;
+int s = 0;
+
+while (s!=321)
+{
+	int r = n%10;
+	s=321;
+	int n = n/10;
+}
+
+printf("%i",s);
+
 	return 0;
 }
